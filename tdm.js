@@ -1,7 +1,3 @@
-var Excp = require('service/excp.js');
-var User = require('service/user.js');
-var Wss = require('service/wss.js');
-
 function tdm( opt ) {
 
 	this.opt = opt || {};
@@ -11,6 +7,11 @@ function tdm( opt ) {
 		return new se( this.opt );
 	}
 
+	/**
+	 * 设定配置信息
+	 * @param  array option 设置或读取配置信息
+	 * @return this / option = null return option 
+	 */
 	this.option = function ( option ) {
 		if ( typeof option != 'undefined' ) {
 			this.opt = option;
@@ -19,6 +20,10 @@ function tdm( opt ) {
 			return this.opt;
 		}
 	}
+
+
+	
+
 
 }
 

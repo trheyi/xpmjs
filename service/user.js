@@ -6,7 +6,8 @@ function User( option )  {
 	
 	option = option || {};
 
-	this.host = option['host'] || 'https://wxcloud.tuanduimao.cn/baas/user';
+	this.host = option['https'] || option['host'];
+	this.api = this.host + '/baas/user';
 
 
 	// 用户登录
@@ -14,12 +15,12 @@ function User( option )  {
 		
 		var that = this;
 		return new Promise(function (resolve, reject) {
-
+			
 			wx.login({
 				success: function(res) {
 
       				wx.request({
-						url: that.host + '/login',
+						url: that.api + '/login',
 						data: { code:res.code }, // 使用 Code 换取 Session ID 
 						header: {'content-type': 'application/json'},
 						success: function (res){
