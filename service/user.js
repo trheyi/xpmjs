@@ -20,7 +20,7 @@ function User( option )  {
 
       				wx.request({
 						url: that.host + '/login',
-						data: { code:res.code},
+						data: { code:res.code }, // 使用 Code 换取 Session ID 
 						header: {'content-type': 'application/json'},
 						success: function (res){
 							if ( res.statusCode != 200 ) {
