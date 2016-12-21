@@ -39,7 +39,7 @@ function Session( option ) {
 			return ss['id'];
 
 		} else {
-			return stor.setSync( '_SESSION_ID', {id:session_id, expires_in:expires_in,  at:new Date(), verified:false } )
+			return stor.setSync( '_SESSION_ID', {id:session_id, expires_in:expires_in,  at:new Date(), verified:true } )
 		}
 	}
 
@@ -57,7 +57,7 @@ function Session( option ) {
 		var sid = this.id();
 		if ( sid == "" || sid == null || sid == undefined) {
 			sid = utils.guid();
-			var resp = this.stor.setSync( '_SESSION_ID', {id:utils.guid(), expires_in:expires_in, at:new Date(), verified:false } );
+			var resp = this.stor.setSync( '_SESSION_ID', {id:sid, expires_in:expires_in, at:new Date(), verified:false } );
 			if (resp !== true ) {
 				return false;
 			}
@@ -99,6 +99,10 @@ function Session( option ) {
 	}
 
 
+	/**
+	 * Session 是否通过后端验证
+	 * @return {Boolean} [description]
+	 */
 	this.isVerified = function() {
 		var ss = this.id( null, true );
 		if ( ss['verified'] === true ) {
