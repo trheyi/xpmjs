@@ -21,6 +21,7 @@ function User( option )  {
 			wx.login({
 				success: function( coderes ) {
 
+
 					that.getUserInfo() 
 
 					.catch(function(e){
@@ -31,16 +32,21 @@ function User( option )  {
 
 						var userinfo = res.userInfo;
 
-						if ( that.ss.isVerified() ) {
-							resolve( userinfo );
-							return;
-						}
+
+						// if ( that.ss.isVerified() ) {
+						// 	resolve( userinfo );
+						// 	return;
+						// }
+						
+
+
 
 						wx.request({
 							url: that.api + '/login',
 							data: { code:coderes.code, _sid:that.ss.id(), rawData:res.rawData, signature:res.signature }, // 使用 Code 换取 Session ID 
 							header: {'content-type': 'application/json'},
 							success: function (res){
+
 								if ( res.statusCode != 200 ) {
 									reject(new Excp('用户登录失败 API错误',500, {
 										'res':res,
@@ -68,6 +74,8 @@ function User( option )  {
 							},
 
 							fail: function (res) { 
+
+								console.log( 'success', res );
 
 								reject(new Excp('用户登录失败',500, {
 									'res':res,

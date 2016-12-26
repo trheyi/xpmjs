@@ -1,12 +1,12 @@
 require('../lib/promise-7.0.4.min.js');
 var Excp = require('excp.js');
 
-function Wss( host ) {
+function Wss( option ) {
 
 	this.isOpen = false;
 	this.events = {};
 
-	this.host = host || 'xxx';
+	this.host = option.host || 'xxx';
 	
 	this.bind = function( command, cb ) {
 
