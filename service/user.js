@@ -8,9 +8,8 @@ function User( option )  {
 	option = option || {};
 
 	this.host = option['https'] || option['host'];
-	this.api = this.host + '/baas/user';
+	this.api = 'https://' +  this.host + '/baas/user';
 	this.ss = new Session( option );
-
 
 	// 用户登录
 	this.login = function() {
@@ -21,7 +20,6 @@ function User( option )  {
 			wx.login({
 				success: function( coderes ) {
 
-
 					that.getUserInfo() 
 
 					.catch(function(e){
@@ -31,15 +29,11 @@ function User( option )  {
 					.then( function( res ) {
 
 						var userinfo = res.userInfo;
-
-
-						// if ( that.ss.isVerified() ) {
-						// 	resolve( userinfo );
-						// 	return;
-						// }
 						
-
-
+						if ( that.ss.isVerified() ) {
+							resolve( userinfo );
+							return;
+						}
 
 						wx.request({
 							url: that.api + '/login',
@@ -74,8 +68,6 @@ function User( option )  {
 							},
 
 							fail: function (res) { 
-
-								console.log( 'success', res );
 
 								reject(new Excp('用户登录失败',500, {
 									'res':res,

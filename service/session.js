@@ -105,13 +105,17 @@ function Session( option ) {
 	 */
 	this.isVerified = function() {
 		var ss = this.id( null, true );
+		
+		if ( ss === null ) {
+			return false;
+		}
+
 		if ( ss['verified'] === true ) {
 			return true;
 		}
 
 		return false;
 	}
-
 
 }
 

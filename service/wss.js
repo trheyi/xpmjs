@@ -6,8 +6,7 @@ function Wss( option ) {
 	this.isOpen = false;
 	this.events = {};
 
-	this.host = option.host || 'xxx';
-	
+	this.host = option['wss'] || option['host'];
 	this.bind = function( command, cb ) {
 
 		this.events[command] = cb;
@@ -50,7 +49,7 @@ function Wss( option ) {
 		console.log( 'send command: ', command, ' params:', params );
 	}
 
-	this.open = function( api ) {
+	this.open = function( channel ) {
 		
 		var that = this;
 
@@ -59,12 +58,12 @@ function Wss( option ) {
 				header:{ 
 				    'content-type': 'application/json'
 				},
-		  		url: 'wss://' +  that.host + api
+				url: 'wss://' +  that.host + channel
 			});
-
 			wx.onSocketOpen(function(res) {
 				that.isOpen = true;
 		  		resolve( res );
+		  		return;
 			});
 
 			wx.onSocketError(function(res){
@@ -73,10 +72,12 @@ function Wss( option ) {
 			  	'WebSocket连接打开失败，请检查！', 500, 
 			  	{
 			  		'res':res,
-			  		'api':api,
+			  		'channel':channel,
 			  		'host':that.host
 			  	}
 			  ));
+
+			  return;
 			})
 
 			wx.onSocketMessage(function( res ){

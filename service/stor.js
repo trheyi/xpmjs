@@ -134,6 +134,22 @@ function Stor( option ) {
 		}
 	}
 
+
+	/**
+	 * 清空
+	 * @return {[type]} [description]
+	 */
+	this.clearSync = function() {
+
+		try {
+			wx.clearStorageSync();
+			return true;
+		} catch (e) {
+			return new Excp('请求 get.removeStorageSync 接口',500, {  key:key, err:e}) 
+		}
+		
+	}
+
 }
 
 
