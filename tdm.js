@@ -2,9 +2,10 @@ function tdm( opt ) {
 
 	this.opt = opt || {};
 	
-	this.require = function ( service_name ) {
+	this.require = function ( service_name, params  ) {
 		var se = require( 'service'  +  '/' + service_name.toLowerCase() + '.js' );
-		return new se( this.opt );
+		params = params || {};
+		return new se( this.opt , params);
 	}
 
 	/**

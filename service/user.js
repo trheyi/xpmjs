@@ -4,7 +4,6 @@ var Session = require('session.js');
 
 function User( option )  {
 
-	
 	option = option || {};
 
 	this.host = option['https'] || option['host'];
@@ -29,7 +28,7 @@ function User( option )  {
 					.then( function( res ) {
 
 						var userinfo = res.userInfo;
-						
+
 						if ( that.ss.isVerified() ) {
 							resolve( userinfo );
 							return;
@@ -37,7 +36,7 @@ function User( option )  {
 
 						wx.request({
 							url: that.api + '/login',
-							data: { code:coderes.code, _sid:that.ss.id(), rawData:res.rawData, signature:res.signature }, // 使用 Code 换取 Session ID 
+							data: { _sid:that.ss.id(), code:coderes.code, rawData:res.rawData, signature:res.signature }, // 使用 Code 换取 Session ID 
 							header: {'content-type': 'application/json'},
 							success: function (res){
 
