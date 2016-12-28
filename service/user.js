@@ -1,14 +1,20 @@
 require('../lib/promise-7.0.4.min.js');
 var Excp = require('excp.js');
 var Session = require('session.js');
+var Table = require('table.js');
 
 function User( option )  {
 
 	option = option || {};
+	
 
-	this.host = option['https'] || option['host'];
-	this.api = 'https://' +  this.host + '/baas/user';
 	this.ss = new Session( option );
+	this.host = option['https'] || option['host'];
+	this.prefix= option['table.prefix'] || '';
+	this.table_name = option['user.table'] || 'user';
+	this.api = 'https://' +  this.host + '/baas/user';
+	this.tab = new Table( option, this.table_name );
+
 
 	// 用户登录
 	this.login = function() {
@@ -34,10 +40,20 @@ function User( option )  {
 							return;
 						}
 
+						var reqData = {
+							_sid:that.ss.id(), 
+							_table:that.table_name,
+							_prefix:that.prefix,
+							code: coderes.code,
+							rawData:res.rawData,
+							signature:res.signature
+						};
+
 						wx.request({
 							url: that.api + '/login',
-							data: { _sid:that.ss.id(), code:coderes.code, rawData:res.rawData, signature:res.signature }, // 使用 Code 换取 Session ID 
+							data: reqData, // 使用 Code 换取 Session ID 
 							header: {'content-type': 'application/json'},
+							method: 'POST',
 							success: function (res){
 
 								if ( res.statusCode != 200 ) {
