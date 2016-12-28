@@ -1,20 +1,54 @@
 require('../lib/promise-7.0.4.min.js');
 var Excp = require('excp.js');
+var Session = require('session.js');
+var Table = require('table.js');
 
 function Wss( option ) {
 
 	this.isOpen = false;
 	this.events = {};
-
 	this.host = option['wss'] || option['host'];
+	this.ss = new Session( option );
+	this.ss.start();
+
+	this.prefix= option['table.prefix'] || '';
+	this.table_name = option['ws.table'] || 'message';
+	this.tab = new Table( option, this.table_name );
+
+
+
+	/**
+	 * 读取当前线上用户
+	 * @return Promise
+	 */
+	this.liveUsers = function() {
+
+	}
+
+
+
+
+
 	this.bind = function( command, cb ) {
+		
+		var that = this;
+
+		if ( command == 'close' ) {
+			wx.onSocketClose(function(res){
+			  that.isOpen = false;
+			  cb(res);
+			  return;
+			});
+		}
+
 
 		this.events[command] = cb;
+		return this;
 	}
+
 
 	this.send = function ( command, params, to ) {
 
-		
 		var that = this;
 
 		return new Promise(function (resolve, reject) {
@@ -54,16 +88,14 @@ function Wss( option ) {
 		var that = this;
 
 		return new Promise(function (resolve, reject) {
+			
 			wx.connectSocket({
-				header:{ 
-				    'content-type': 'application/json'
-				},
-				url: 'wss://' +  that.host + channel
+				url: 'wss://' +  that.host + channel + '?_sid=' + that.ss.id() + '&_prefix=' + that.prefix + '&_table=' + that.table_name,
 			});
+
 			wx.onSocketOpen(function(res) {
 				that.isOpen = true;
-		  		resolve( res );
-		  		return;
+		  		resolve(res);
 			});
 
 			wx.onSocketError(function(res){
