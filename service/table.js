@@ -274,7 +274,7 @@ function table( option, table_name ) {
 
 
 	/**
-	 * 运行 SQL ( 管理员 Only )
+	 * 运行 SQL ( 需管理员权限 )
 	 * @param  string sql 完整的 SQL  ( eg: "UPDATE tab_name SET name=? WHERE id=? " )
 	 * @param  array  data 动态数据 ( eg: where = "UPDATE tab_name SET name=? WHERE id=? ", data= ["张艺谋", 1] 拼接后的 SQL: UPDATE tab_name SET name='张艺谋' WHERE id=1 )
 	 * @param  bool ret 是否返回查询结果，默认 false , 仅返回是否查询成功
