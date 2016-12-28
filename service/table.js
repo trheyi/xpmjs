@@ -10,21 +10,16 @@ function table( option, table_name ) {
 	this.prefix= option['table.prefix'] || '';
 	this.api = 'https://' +  this.host + '/baas/table';
 	this.table_name = table_name || null;
+	this.queryBuilder = { where:[], limit:{}, order:[], paginate:{} };
 	this.sync = false;
 	this.ss = new Session( option );
 	this.ss.start();
 	
 
-
 	/**
-	 * 这个方法暂未实现 ( 转成同步函数 )
-	 * @return {[type]} [description]
+	 * 返回数据表全名
+	 * @return string table_fullname
 	 */
-	this.sync = function() { 
-		this.sync = true;
-		return this;
-	}
-
 	this.table = function() {
 		return '_baas_' +  this.prefix + '_' +  this.table_name;
 	}
@@ -32,8 +27,8 @@ function table( option, table_name ) {
 
 	/**
 	 * 创建一条记录
-	 * @param  {[type]} data [description]
-	 * @return {[type]}      [description]
+	 * @param  object data 记录数据 ( Key-Value 结构)
+	 * @return Promise
 	 */
 	this.create = function( data ) {
 		return this.__r('/create', {data:data} );
@@ -42,9 +37,9 @@ function table( option, table_name ) {
 
 	/**
 	 * 根据数据表ID, 更新一条记录
-	 * @param  {[type]} id   [description]
-	 * @param  {[type]} data [description]
-	 * @return {[type]}      [description]
+	 * @param  int id 数据表ID
+	 * @param  object data 记录数据 ( Key-Value 结构)
+	 * @return Promise
 	 */
 	this.update = function( id, data ) {
 		return this.__r('/update', {_id:id, data:data} );
@@ -52,10 +47,10 @@ function table( option, table_name ) {
 
 
 	/**
-	 * 使用数据表唯一主键，创建一条记录
-	 * @param  {[type]} $uni_key [description]
-	 * @param  {[type]} $data    [description]
-	 * @return {[type]}          [description]
+	 * 使用数据表唯一键，创建一条记录
+	 * @param  string uni_key 唯一键字段名称
+	 * @param  object data 记录数据 ( Key-Value 结构)
+	 * @return Promise
 	 */
 	this.updateBy = function( uni_key, data ) {
 		return this.__r('/updateby', {uni_key:uni_key, data:data} );	
@@ -64,10 +59,10 @@ function table( option, table_name ) {
 
 
 	/**
-	 * 根据数据表唯一主键数值，删除一条记录
-	 * @param  {[type]} data_key [description]
-	 * @param  {[type]} uni_key  [description]
-	 * @return {[type]}          [description]
+	 * 根据数据表唯一键数值，删除一条记录
+	 * @param  string data_key 唯一键数值
+	 * @param  string uni_key  唯一键字段名称
+	 * @return Promise
 	 */
 	this.remove = function( data_key, uni_key ){
 		uni_key = uni_key || '_id';
@@ -75,6 +70,13 @@ function table( option, table_name ) {
 	}
 
 
+	/**
+	 * 查询数据表， 返回一组记录和总数 {data:[], total:100}
+	 * @param  string where 查询条件, 从 where 开始 ( eg: "where name=? " )
+	 * @param  array  data 动态数据 ( eg: where = "where name=? or name=? ", data= ["张艺谋", "冯小刚"] 拼接后的 SQL: where name='张艺谋' or name='冯小刚' )
+	 * @param  array fields 返回字段清单,默认为 [] 返回所有字段
+	 * @return Promise
+	 */
 	this.select = function( where, data, fields ) {
 		fields = fields || [];
 		data = data || [];
@@ -83,10 +85,29 @@ function table( option, table_name ) {
 	}
 
 
+	/**
+	 * 查询数据表，返回一组记录 
+	 * @param  string where 查询条件, 从 where 开始 ( eg: "where name=? " )
+	 * @param  array  data 动态数据 ( eg: where = "where name=? or name=? ", data= ["张艺谋", "冯小刚"] 拼接后的 SQL: where name='张艺谋' or name='冯小刚' )
+	 * @param  array fields 返回字段清单,默认为 [] 返回所有字段
+	 * @return Promise
+	 */
 	this.getData = function ( where, data, fields ) {
+
+		fields = fields || [];
+		data = data || [];
+		where = where || "";
+		return this.__r('/getdata', {query:where, data:data, fields:fields});
 
 	}
 
+	/**
+	 * 查询数据表, 返回一行数据
+	 * @param  string where 查询条件, 从 where 开始 ( eg: "where name=? " )
+	 * @param  array  data 动态数据 ( eg: where = "where name=? or name=? ", data= ["张艺谋", "冯小刚"] 拼接后的 SQL: where name='张艺谋' or name='冯小刚' )
+	 * @param  array fields 返回字段清单,默认为 [] 返回所有字段
+	 * @return Promise
+	 */
 	this.getLine = function ( where, data, fields ) {
 
 		fields = fields || [];
@@ -96,6 +117,14 @@ function table( option, table_name ) {
 
 	}
 
+
+	/**
+	 * 查询数据表, 返回一个字段数值
+	 * @param  string where 查询条件, 从 where 开始 ( eg: "where name=? " )
+	 * @param  array  data 动态数据 ( eg: where = "where name=? or name=? ", data= ["张艺谋", "冯小刚"] 拼接后的 SQL: where name='张艺谋' or name='冯小刚' )
+	 * @param  array fields 返回字段清单,默认为 [] 返回所有字段
+	 * @return Promise
+	 */
 	this.getVar = function( field,  where, data ) {
 
 		field = field || '_id';
@@ -105,23 +134,46 @@ function table( option, table_name ) {
 	}
 
 	
-	this.runSql = function ( sql, data, ret  ) {
-		sql = sql || "";
-		ret = ret || false;
-		data = data || [];
-		return this.__r('/runsql', {sql:sql, data:data, return:ret});
-	}
+	
 
+	/**
+	 * 下一个自增ID 数值
+	 * @return Promise
+	 */
 	this.nextid = function() {
 		return this.__r('/nextid', {});	
 	}
 
+	/**
+	 * 根据数据表 ID, 查询一条数值
+	 * @param int id 数据表ID
+	 * @return Promise
+	 */
 	this.get = function( id ) {
 		return this.__r('/get', {_id:id} );	
 	}
 
 
-	this.queryBuilder = { where:[], limit:{}, order:[], paginate:{} };
+
+	
+	/**
+	 * 查询语句构造器
+	 *
+	 * 	tb.query()
+     *      .where('name', '=', '冯小刚')
+     *      .orderby('name', 'asc')
+     *      .limit(2)  // 仅查询 2条 
+     *      .fetch('name','company');  // 读取字段
+     *      
+	 *  tb.query()
+     *   .where('name', '=', '张艺谋')
+     *   .orwhere('name', '=', '冯小刚')
+     *   .orderby('name', 'desc')
+     *   .paginate(3, 2)  // 分3页，当前显示第 2页 
+     *   .fetch('name','company');    // 读取字段
+     *         
+	 * @return this
+	 */
 	this.query = function () {
 		this.queryBuilder = { where:[], limit:{}, order:[], paginate:{} };
 		return this;
@@ -129,22 +181,41 @@ function table( option, table_name ) {
 
 
 
+		/**
+		 * 构造查询条件
+		 * @param  string  field 字段名称
+		 * @param  string  exp   关系操作符 ( =, <> , > , <, like ... )
+		 * @param  string  value 字段数值 
+		 * @return this 
+		 */
 		this.where = function( field, exp, value ) {
-
 			this.queryBuilder['where'].push({op:'and', field:field, exp:exp, value:value});
-
 			return this;
 		}
 
 
+		/**
+		 * 构造查询条件 ( Or 关系 )
+		 * @param  string  field 字段名称
+		 * @param  string  exp   关系操作符 ( =, <> , > , <, like ... )
+		 * @param  string  value 字段数值 
+		 * @return this 
+		 */
 		this.orWhere = function( field, exp, value ) {
 
 			this.queryBuilder['where'].push({op:'or', field:field, exp:exp, value:value});
 			return this;
 		}
 
-		this.orwhere = this.orWhere;
+		this.orwhere = this.orWhere; 
 
+
+		/**
+		 * 构造 Order 查询
+		 * @param  string field 字段名称
+		 * @param  string  order 排序呢方法 ( asc / desc )
+		 * @return this
+		 */
 		this.orderBy = function(field, order ) {
 			this.queryBuilder['order'].push({ field:field, order:order});
 			return this;
@@ -152,6 +223,17 @@ function table( option, table_name ) {
 
 		this.orderby = this.orderBy;
 
+
+		/**
+		 * 构造 Limit 查询
+		 * 
+		 * td.limit(10)      //最多返回10条记录 
+		 * td.limit(2, 10);  // 从第2条记录开始，最多返回10条记录
+		 * 
+		 * @param  int from 记录偏移量 （  如 limit 为空, from 为记录最大值  )
+		 * @param  int limit 记录最大值
+		 * @return this
+		 */
 		this.limit = function( from, limit ) {
 
 			if ( arguments.length == 1 ) {
@@ -162,7 +244,15 @@ function table( option, table_name ) {
 			return this;
 		}
 
-		//->paginate(4,['_id'], '/index.php?a=100&page=', 1 )
+		
+		/**
+		 * 构造分页查询
+		 * @param  int perpage 每页显示记录数量, 默认 20
+		 * @param  int page 当前页， 默认为 1
+		 * @param  string link 分页链接，默认为 null
+		 * @param  array fields 计算记录总数时查询字段, 默认为 ['_id'] （ 一般无需修改 )
+		 * @return this
+		 */
 		this.paginate = function(  perpage, page, link, fields ) {
 			fields = fields || ['_id'];
 			link = link || null;
@@ -172,23 +262,43 @@ function table( option, table_name ) {
 			return this;
 		}
 
+
+		/**
+		 * 执行数据查询
+		 * @return Promise 
+		 */
 		this.fetch = function() {
 			return this.__r('/query', {fields:arguments, query:this.queryBuilder});
 		}
 
 
 
+	/**
+	 * 运行 SQL ( 管理员 Only )
+	 * @param  string sql 完整的 SQL  ( eg: "UPDATE tab_name SET name=? WHERE id=? " )
+	 * @param  array  data 动态数据 ( eg: where = "UPDATE tab_name SET name=? WHERE id=? ", data= ["张艺谋", 1] 拼接后的 SQL: UPDATE tab_name SET name='张艺谋' WHERE id=1 )
+	 * @param  bool ret 是否返回查询结果，默认 false , 仅返回是否查询成功
+	 * @return Promise
+	 */
+	this._run = function ( sql, data, ret  ) {
+		sql = sql || "";
+		ret = ret || false;
+		data = data || [];
+		return this.__r('/runsql', {sql:sql, data:data, return:ret});
+	}
 
 
 	/**
 	 * 创建数据表结构  ( 需管理员权限 )
 	 * @param  object schema        数据表结构体
+	 * @param  object acl  数据表权限声明
 	 * @param  bool dropIfExist     如果存在则删除数据表 默认为 false
 	 * @return Promise
 	 */
-	this._schema = function( schema, dropIfExist ) {
+	this._schema = function( schema, acl,  dropIfExist ) {
 		dropIfExist = dropIfExist || false;
-		return this.__r('/schema', {schema:schema, dropIfExist:dropIfExist} );
+		acl = acl || {};
+		return this.__r('/schema', {schema:schema, acl:acl, dropIfExist:dropIfExist} );
 	}
 
 
@@ -202,6 +312,38 @@ function table( option, table_name ) {
 		return this.__r('/clear', {} );
 	}
 
+
+
+	/**
+	 * 设定/查询数据表鉴权 ( 需要管理员权限 )
+	 * @param  object acl 鉴权, 为空返回当前鉴权信息
+	 * @return Promise
+	 */
+	this._acl = function(  acl, name ) {
+
+		name = name || '{record}';  // {table} / {record} / field_name
+		return this.__r('/acl', {name:name, acl:acl} );
+	}
+
+
+
+
+	/**
+	 * 转成同步函数 ( 暂未实现  )
+	 * 
+	 * @计划实现如下写法: 
+	 * 
+	 * 	 var resp = tb.sync().create();
+	 * 	 var resp = tb.sync().query()->where("name=?",[100])->fetch('name');
+	 * 	 ...
+	 * 	 
+	 * @return this.syncMethods
+	 */
+	
+	this.sync = function() { 
+		this.sync = true;
+		return this;
+	}
 
 
 	/**
