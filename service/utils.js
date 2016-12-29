@@ -1,4 +1,5 @@
 require('../lib/promise-7.0.4.min.js');
+var Session = require('session.js');
 var Excp = require('excp.js');
 
 /**
@@ -7,6 +8,8 @@ var Excp = require('excp.js');
  */
 
 function Utils( option ) {
+
+	this.ss = new Session( option );
 
 	/**
 	 * 生成一个 Guid
@@ -18,6 +21,59 @@ function Utils( option ) {
     		return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
   		}
   		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+	}
+
+
+	this.request = function( method, api, data, option ) {
+		option = option || {};
+		option['header'] = option['header'] || {'content-type': 'application/json'};
+		data = data || {};
+		data["_sid"] = this.ss.id();
+
+		return new Promise(function (resolve, reject) {
+
+			wx.request({
+				url: api,
+				data: data, 
+				header: option['header'],
+				method: method,
+				success: function (res){
+
+					if ( res.statusCode != 200 ) {
+						reject(new Excp('请求API失败', res.statusCode, {
+							res:res,
+							method:method, 
+							api:api, 
+							data:data, 
+							option:option
+						}));
+						return;
+					}
+
+					if ( typeof res['data'] != 'object') {
+						reject(new Excp('请求API失败',500, {
+							res:res,
+							method:method, 
+							api:api, 
+							data:data, 
+							option:option
+						}));
+						return;
+					}
+					resolve( res['data'] );
+				},
+
+				fail: function (res) { 
+					reject(new Excp('请求API失败',500, {
+						res:res,
+						method:method, 
+						api:api, 
+						data:data, 
+						option:option
+					}));
+				}
+			});
+		});
 	}
 
 

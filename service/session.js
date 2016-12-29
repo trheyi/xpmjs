@@ -1,13 +1,50 @@
 require('../lib/promise-7.0.4.min.js');
 var Excp = require('excp.js');
 var Stor = require('stor.js');
-var Utils = require('utils.js');
 
 function Session( option ) {
 
 	this.option = option || {};
 	this.stor = new Stor( option );
-	this.utils = new Utils( option );
+
+
+	this.guid = function(){
+		
+		function S4() {
+    		return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  		}
+  		return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+	}
+
+
+	/**
+	 * 计算时间差值
+	 * @param  datetime start 开始时间
+	 * @param  datetime end   结束时间
+	 * @param  string unit 时间单位 （ 默认 second,  有效值  day hour  minute second ）
+	 * @return 时间差值
+	 */
+	this.timediff = function( start, end, unit ) {
+		var u = unit || 'second'; // day hour  minute second
+		var startDate = new Date( start );
+		var endDate   = new Date( end );
+
+		var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+		
+		if ( u == 'second' ) {
+			return seconds;
+		} else if ( u == 'minute' ) {
+			return seconds / 60
+		} else if ( u == 'hour' ) {
+			return seconds / 3600
+		} else if ( u == 'day' ) {
+			return seconds / 86400
+		}
+		
+		return seconds;
+	}
+
+
 
 	/**
 	 * 读取/设定客户端会话 ID 
@@ -17,7 +54,6 @@ function Session( option ) {
 	this.id = function( session_id, get_object ) {
 
 		var stor = this.stor;
-		var utils = this.utils;
 		var expires_in = this.option['session.expires_in'] || 7200;
 		get_object = get_object || false;
 
@@ -27,7 +63,7 @@ function Session( option ) {
 			var ss = stor.getSync('_SESSION_ID');
 			if ( ss == "" || ss == null || ss == undefined) {
 				return null;
-			} else if ( utils.timediff( ss['at'], new Date()) >=  ss['expires_in'] ) {
+			} else if ( this.timediff( ss['at'], new Date()) >=  ss['expires_in'] ) {
 				stor.setSync( '_SESSION_ID', null);
 				return null;
 			}
@@ -51,12 +87,11 @@ function Session( option ) {
 	this.start = function() {
 
 		var stor = this.stor;
-		var utils = this.utils;
 		var expires_in = this.option['session.expires_in'] || 7200;
 
 		var sid = this.id();
 		if ( sid == "" || sid == null || sid == undefined) {
-			sid = utils.guid();
+			sid = this.guid();
 			var resp = this.stor.setSync( '_SESSION_ID', {id:sid, expires_in:expires_in, at:new Date(), verified:false } );
 			if (resp !== true ) {
 				return false;
