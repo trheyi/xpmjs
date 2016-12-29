@@ -5,6 +5,12 @@ function Stor( option ) {
 
 	this.option = option || {};
 
+	/**
+	 * 保存数据，存在则覆盖
+	 * @param string key 键
+	 * @param mix value 值
+	 * @param Promise
+	 */
 	this.set = function( key, value ) {
 
 		var that = this;
@@ -27,6 +33,11 @@ function Stor( option ) {
 		})
 	}
 
+	/**
+	 * 读取数据
+	 * @param  string key 键
+	 * @return Promise
+	 */
 	this.get = function( key ) {
 
 		var that = this;
@@ -48,6 +59,11 @@ function Stor( option ) {
 		})
 	}
 
+	/**
+	 * 读取同步接口
+	 * @param  string key 键
+	 * @return 成功返回 value 失败返回 Excp Object
+	 */
 	this.getSync = function( key ) {
 		try {
 			return wx.getStorageSync(key);
@@ -57,6 +73,13 @@ function Stor( option ) {
 		}
 	}
 
+
+	/**
+	 * 保存同步接口
+	 * @param string key 键
+	 * @param mix value 值
+	 * @return 成功返回 true 失败返回 Excp Object
+	 */
 	this.setSync = function( key, value) {
 		try {
 			wx.setStorageSync(key,value);
@@ -67,6 +90,13 @@ function Stor( option ) {
 	}
 
 
+	/**
+	 * 设定一张 Map 指定字段数值
+	 * @param string name  Map名称
+	 * @param string key   字段名称
+	 * @param mix value  数值
+	 * @param Promise
+	 */
 	this.setMap = function( name, key, value ) {
 
 		var that = this;
@@ -84,7 +114,13 @@ function Stor( option ) {
 
 	}
 
-
+	/**
+	 * 设定一张 Map 指定字段数值 同步接口
+	 * @param string name  Map名称
+	 * @param string key   字段名称
+	 * @param mix value  数值
+	 * @return 成功返回 true 失败返回 Excp Object
+	 */
 	this.setMapSync = function( name, key, value ) {
 		try {
 			var data = wx.getStorageSync( name ) || {};
@@ -96,6 +132,12 @@ function Stor( option ) {
 		}
 	}
 
+	/**
+	 * 读取一张 Map 指定字段数值
+	 * @param string name  Map名称
+	 * @param string key   字段名称
+	 * @param Promise
+	 */
 	this.getMap = function( name, key ) {
 		var that = this;
 		return new Promise(function (resolve, reject) {
@@ -110,6 +152,12 @@ function Stor( option ) {
 		});
 	}
 
+	/**
+	 * 读取一张 Map 指定字段数值 同步接口
+	 * @param string name  Map名称
+	 * @param string key   字段名称
+	 * @return 成功返回 value 失败返回 Excp Object
+	 */
 	this.getMapSync = function( name,  key ) {
 		try {
 			var data = wx.getStorageSync( name );
@@ -122,8 +170,8 @@ function Stor( option ) {
 
 	/**
 	 * 删除
-	 * @param  {[type]} key [description]
-	 * @return {[type]}     [description]
+	 * @param  string key 键
+	 * @return 成功返回 true 失败返回 Excp Object
 	 */
 	this.rmSync = function( key ) {
 		try {
@@ -136,8 +184,8 @@ function Stor( option ) {
 
 
 	/**
-	 * 清空
-	 * @return {[type]} [description]
+	 * 清空所有
+	 * @return 成功返回 true 失败返回 Excp Object
 	 */
 	this.clearSync = function() {
 

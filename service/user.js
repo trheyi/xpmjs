@@ -82,7 +82,7 @@ function User( option )  {
 			wx.login({
 				success: function( coderes ) {
 
-					that.getUserInfo() 
+					that.get() 
 
 					.catch(function(e){
 						reject(e);
@@ -164,7 +164,7 @@ function User( option )  {
 	}
 
 
-	this.getUserInfo = function() {
+	this.get = function() {
 		
 		return new Promise(function (resolve, reject) {
 			

@@ -55,10 +55,10 @@ function Wss( option ) {
 
 
 	/**
-	 * 绑定 Socket 各种事件
+	 * 接收 WebSocket Sever 事件
 	 * @param  string  evnet  事件名称，有效值 ( open/close/message/error )
 	 * @param  function callback( res ) 回调函数
-	 * @return this
+	 * @return  this
 	 */
 	this.bind = function ( evnet, callback ) { 
 		this.conn_events[evnet] = callback;
@@ -67,7 +67,7 @@ function Wss( option ) {
 
 
 	/**
-	 * 模拟监听指令 
+	 * 接收指令并响应
 	 * @param  string  command  指令名称
 	 * @param  function callback( res, status ) 指定响应函数 
 	 *         callback 参数表: 
@@ -87,7 +87,7 @@ function Wss( option ) {
 
 
 	/**
-	 * 发送指定
+	 * 发送指令
 	 * @param  string command 指令名称
 	 * @param  object params  请求参数
 	 * @param  string/int receiver 接受者 ( 连接 id 或者用户 id )
@@ -225,21 +225,21 @@ function Wss( option ) {
 
 		});
 	}
+	
 
 	/**
 	 * 关闭 Websocket 信道
-	 * @return Promise
+	 * @return null
 	 */
 	this.close = function() {
 		wx.closeSocket();
 	}
 
 	/**
-	 * 设定 Websocket 信道管理权限
-	 * @return {[type]} [description]
+	 * 设定/查询信道鉴权 ( 需要管理员权限 )
+	 * @return Promise
 	 */
-	this.acl = function() {
-		// wx.setRows();
+	this._acl = function() {
 	}
 
 }
