@@ -34,6 +34,7 @@ function Wss( option ) {
 
 			that.events['getConnections'] = function( res, status ) {
 
+
 				if ( eventBack != null ) {
 					that.events['getConnections'] = eventBack;
 				}
@@ -210,8 +211,11 @@ function Wss( option ) {
 				var error = resp['data']['error'] || null;
 				var cmd =  req['c'] || null;
 
+
 				if ( code !== 0  ) {
 					if ( typeof that.events[cmd] == 'function' ) {
+
+
 						that.events[cmd]( {'request':req, 'response':res,'error':error}, 'error');
 					}
 					return;
