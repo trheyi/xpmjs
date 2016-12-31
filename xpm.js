@@ -1,4 +1,4 @@
-function tdm( opt ) {
+function xpm( opt ) {
 
 	this.opt = opt || {};
 	
@@ -22,10 +22,6 @@ function tdm( opt ) {
 		}
 	}
 
-
-	
-
-
 }
 
-module.exports = new tdm()
+module.exports = new xpm()

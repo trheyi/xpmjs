@@ -47,7 +47,7 @@ function Pay( option ) {
 					   'success':function(res){	
 					   		resolve({
 					   			return_code:'SUCCESS',
-					   			attach:paydata['attach'],
+					   			attach:params['attach'],
 					   			out_trade_no:data['out_trade_no'],
 					   			prepay_id:data['prepay_id']
 					   		});
