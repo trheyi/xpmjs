@@ -92,10 +92,10 @@ function User( option )  {
 
 						var userinfo = res.userInfo;
 
-						// if ( that.ss.isVerified() ) {
-						// 	resolve( userinfo );
-						// 	return;
-						// }
+						if ( that.ss.isVerified() ) {
+							resolve( userinfo );
+							return;
+						}
 
 						var reqData = {
 							_sid:that.ss.id(), 

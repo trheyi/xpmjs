@@ -17,10 +17,49 @@ function Pay( option ) {
 	this.ss.start();
 
 	
-	this.request = function() {
-		return utils.request('POST', this.api + '/order');
-	}
+	this.request = function( paydata ) {
+		
+		var that = this;
 
+		return new Promise(function (resolve, reject) {
+
+			utils.request('POST', that.api + '/unifiedorder', paydata )
+
+			.then(function( data ) {
+
+				if ( data['return_code'] == 'SUCCESS' ) {
+
+					wx.requestPayment({
+					   'timeStamp': data['timeStamp'].toString(),
+					   'nonceStr': data['nonceStr'],
+					   'package':data['package'],
+					   'signType': 'MD5',
+					   'paySign': data['paySign'],
+					   'success':function(res){	
+					   		resolve({
+					   			return_code:'SUCCESS',
+					   			attach:paydata['attach'],
+					   			out_trade_no:data['out_trade_no'],
+					   			prepay_id:data['prepay_id']
+					   		});
+					   },
+					   
+					   'fail':function(res){
+					   		reject(new Excp('微信支付接口错误',500, {'res':res}));
+					   }
+					});
+
+				} else {
+					reject(new Excp('统一下单接口错误',500, {'data':data}));
+				}
+			})
+
+			.catch( function( excp ) {
+				reject(excp);
+			})
+		});
+
+	}
 
 }
 
