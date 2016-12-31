@@ -17,13 +17,22 @@ function Pay( option ) {
 	this.ss.start();
 
 	
-	this.request = function( paydata ) {
+	/**
+	 * 发起微信支付请求
+	 *
+	 * @see https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1
+	 * @param  array params 支付请求参数 
+	 *         params['total_fee'] & params['body'] 必须填写
+	 *         
+	 * @return Promise
+	 */
+	this.request = function( params ) {
 		
 		var that = this;
 
 		return new Promise(function (resolve, reject) {
 
-			utils.request('POST', that.api + '/unifiedorder', paydata )
+			utils.request('POST', that.api + '/unifiedorder', params )
 
 			.then(function( data ) {
 
