@@ -293,7 +293,7 @@ pay.request({
 
 ```
 
-#### 6. 本地存储 ( Stor ) 
+### 6. 本地存储 ( Stor ) 
 
 ```javascript
 var stor = app.xpm.require('Stor');
