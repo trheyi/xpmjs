@@ -1,7 +1,7 @@
 XpmJS - 小程序云端增强 SDK 
 ================
 
-## 一、XpmJS 能做啥
+## 一、XpmJS 是啥
 
 XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可实现用户登录、WebSocket 通信、微信支付、云端数据表格、文件存储等功能。虽然 PHP 是最好的编程语言, 但是使用 XpmJS 后, 无需学习包括 PHP 在内的任何后端语言，**用 Javascript 即可搞定一切，NodeJS 也不用！**
 
@@ -310,33 +310,137 @@ console.log(stor.getMapSync('map_name','key'));
 
 ![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/demo-sc)
 
-
 扫描二维码体验
-
 ![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/wxapp-0.93.jpg)
 
-
-如无权限，扫码申请
-
+权限申请
 ![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/qrcode)
 
 
 
 ## 四、安装配置
 
-### 1. 申请 Https 证书
+### 1. 云端配置
 
-### 2. 云端程序安装配置
+**【安装后端程序】**
 
-### 3. 启用 SDK 
+推荐使用[腾讯云](http://partners.qcloud.com/invitation/37360299583e2904ee602)（ 访问微信接口快, 可以免费申请 Https 证书 ） 
+
+方法1: 使用脚本安装 （ 目前仅支持 Ubuntu 14.04 64 LTS 操作系统）
+
+创建一台云服务器，选择 **Ubuntu 14.04 64 LTS** 操作系统。 登录服务器运行以下脚本。
+
+```bash
+wget http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com
+
+```
+
+方法2: 使用 Docker 安装
+
+```bash
+docker run -d --name=xpmjs-server  \
+    -e "HOST=yourdomain.com" \
+    -d /host/data:/data  \
+    -d /host/apps:/apps  \
+    -d /host/config:/config  \
+    -p 80:80 -p 443:443  \
+    tuanduimao/tuandimao:1.0rc-3in1 
+        
+```
+
+**【设置管理员名称和密码】**
+
+访问: http://yourdomian.com/setup.php
+
+1. 填写后台信息
+![setup-1.png](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/setup-1.png)
+
+2. 填写管理员信息
+![setup-2.png](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/setup-2.png)
 
 
-## 五、未来规划
+**【上传 HTTPS 证书 & 微信支付证书】**
 
-## 六、参与贡献
+访问：http://yourdomian.com/baas-admin/cert/index
+上传 HTTPS 证书和证书密钥，如已申请微信支付，需上传微信双向验证证书和密钥。
+
+![https-cert.png](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/https-cert.png)
+
+上传好证书后，登录服务器，重启容器。
+
+```bash
+docker restart xpmjs-server
+```
+
+访问： https://yourdomian.com  ( 有 **"S"**， 检查证书是否生效 ）
+
+
+**【设置小程序配置信息】**
+
+访问： https://yourdomian.com/baas-admin/conf/index ( 有 **"S"**， 填写小程序和微信支付的信息 ）
+
+![wechat-conf](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat-conf.png)
 
 
 
+### 2. 使用 XpmJS 
+
+**【下载代码】**
+
+使用  Git Bash , 进入小程序项目目录， 运行 git clone 拉去代码。（也可以
+使用 GitHub 等客户端 Clone 代码 ）
+
+```bash
+git clone https://github.com/XpmJS/xpmjs.git xpmjs
+
+```
+
+克隆成功后的目录结构为: 
+
+![tree](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/tree.png)
 
 
+**【编写配置信息】**
+
+编辑 `app.js` 将域名更换为你的域名。（ 必须配置好 Https 证书 ）
+
+```javascript
+App({
+
+  onLaunch: function () {
+
+    var that = this;
+
+    // 创建 xpm 对象
+    this.xpm = require('xpmjs/xpm.js').option({
+        'host':'yourdomian.com',
+        'https':'yourdomian.com',
+        'wss': 'yourdomian.com/ws-server',
+        'table.prefix': 'demo',
+        'user.table':'user'
+    });
+
+    // 创建全局对象
+    this.wss = this.xpm.require('wss');  // 信道
+    this.session = this.xpm.require('session');  // 会话
+    this.stor = this.xpm.require('stor'); // 存储
+
+  },
+
+  xpm:null,
+  session:null,
+  stor:null,
+  wss:null
+})
+
+```
+
+
+建议将 xpm、wss、session、stor 设定为全局变量。更多示例参考 [小程序Demo](https://github.com/xpmjs/wxdemo)
+
+
+
+### F.A.Q.
+
+待整理
 
