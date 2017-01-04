@@ -340,9 +340,9 @@ wget http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com
 ```bash
 docker run -d --name=xpmjs-server  \
     -e "HOST=yourdomain.com" \
-    -d /host/data:/data  \
-    -d /host/apps:/apps  \
-    -d /host/config:/config  \
+    -v /host/data:/data  \
+    -v /host/apps:/apps  \
+    -v /host/config:/config  \
     -p 80:80 -p 443:443  \
     tuanduimao/tuandimao:1.0rc-3in1 
         
