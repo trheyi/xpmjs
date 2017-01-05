@@ -49,10 +49,9 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc
+    tuanduimao/xpmjs-server:1.0rc2
 
 ```
-
 
 ## 三、XpmJS 咋用
 
