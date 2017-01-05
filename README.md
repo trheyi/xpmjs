@@ -194,7 +194,7 @@ console.log( session.get('hello') );
 
 #### 创建数据表 _schema()
 
-仅管理员帐号可以运行
+仅管理员帐号拥有创建数据表权限 ( 登录管理后台，打开用户表，将开发者对应帐号记录的 isadmin 字段数值设置为 1 )
 
 ```javascript
 var table = app.xpm.require('Table', 'hello');
