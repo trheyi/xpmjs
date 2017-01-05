@@ -13,7 +13,7 @@ XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可�
 ![无敌连环 CallBack VS Promise 图](http://of2is3ok3.bkt.clouddn.com/xcx/images/promise.png)
 
 
-### XpmJS 封装了大部分常用后端操作，还提供一个管理后台，比如微信支付只要一行代码就可以实现。
+### XpmJS 封装了常用后端操作，还提供一个管理后台，微信支付只要一行代码就可以实现！
 
 ![微信支付代码示例，管理后台截图](http://of2is3ok3.bkt.clouddn.com/xcx/images/paynow.png)
 
