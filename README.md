@@ -6,20 +6,19 @@ XpmJS - 小程序云端增强 SDK
 XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可实现用户登录、WebSocket 通信、微信支付、云端数据表格、文件存储等功能。虽然 PHP 是最好的编程语言, 但是使用 XpmJS 后, 无需学习包括 PHP 在内的任何后端语言，**用 Javascript 即可搞定一切，NodeJS 也不用！**
 
 
-## 二、为啥用 XpmJS
+## 二、为啥 XpmJS
 
-
-#### 从代码结构上看 XpmJS 更优雅！因为使用了 Promise！ 
+### 从代码结构上看 XpmJS 更优雅！因为使用了 Promise！ 
 
 ![无敌连环 CallBack VS Promise 图](http://of2is3ok3.bkt.clouddn.com/xcx/images/promise.png)
 
 
-#### XpmJS 封装了大部分常用后端操作，还提供一个管理后台，比如微信支付只要一行代码就可以实现。
+### XpmJS 封装了大部分常用后端操作，还提供一个管理后台，比如微信支付只要一行代码就可以实现。
 
 ![微信支付代码示例，管理后台截图](http://of2is3ok3.bkt.clouddn.com/xcx/images/paynow.png)
 
 
-#### 后端部署在你的云主机上！你可以完全掌控数据。
+### 后端部署在你的云主机上！你可以完全掌控数据。
 
 
 **方法1: 一键安装**
