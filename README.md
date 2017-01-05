@@ -6,7 +6,56 @@ XpmJS - 小程序云端增强 SDK
 XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可实现用户登录、WebSocket 通信、微信支付、云端数据表格、文件存储等功能。虽然 PHP 是最好的编程语言, 但是使用 XpmJS 后, 无需学习包括 PHP 在内的任何后端语言，**用 Javascript 即可搞定一切，NodeJS 也不用！**
 
 
-## 二、XpmJS 咋用
+## 二、为啥用 XpmJS
+
+
+#### 从代码结构上看 XpmJS 更优雅！因为使用了 Promise！ 
+
+![无敌连环 CallBack VS Promise 图](http://of2is3ok3.bkt.clouddn.com/xcx/images/promise.png)
+
+
+#### XpmJS 封装了大部分常用后端操作，还提供一个管理后台，比如微信支付只要一行代码就可以实现。
+
+![微信支付代码示例，管理后台截图](http://of2is3ok3.bkt.clouddn.com/xcx/images/paynow.png)
+
+
+#### 后端部署在你的云主机上！你可以完全掌控数据。
+
+
+**方法1: 一键安装**
+
+推荐使用[腾讯云一键安装链接](http://partners.qcloud.com/invitation/37360299583e2904ee602)
+（ 访问微信接口快, 可以免费申请 Https 证书 ） 
+
+
+**方法2: 安装脚本**
+
+```bash
+# 使用 Ubuntu 14.04 64位 LTS
+wget http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com
+
+```
+
+**方法3: 使用 Docker 安装**
+
+```bash
+
+# 安装 Docker 
+curl -sSL https://get.daocloud.io/docker | sh
+
+# 启动容器
+docker run -d --name=xpmjs-server  \
+    -e "HOST=yourdomain.com" \
+    -v /host/data:/data  \
+    -v /host/apps:/apps  \
+    -v /host/config:/config  \
+    -p 80:80 -p 443:443  \
+    tuanduimao/xpmjs-server:1.0rc
+
+```
+
+
+## 三、XpmJS 咋用
 
 ### 1. 用户 ( User )
 
