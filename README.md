@@ -356,13 +356,11 @@ console.log(stor.getMapSync('map_name','key'));
 
 ## 三、微信小程序 Demo
 
-![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/demo-sc)
+![微信小程序 Demo](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat.demo.png)
 
-扫描二维码体验
-![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/wxapp-0.93.jpg)
 
-权限申请
-![微信小程序 Demo](http://7xleg1.com1.z0.glb.clouddn.com/qrcode)
+[小程序 Demo 源码](https://github.com/xpmjs/wxdemo)
+
 
 
 
