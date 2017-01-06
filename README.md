@@ -361,7 +361,7 @@ console.log(stor.getMapSync('map_name','key'));
 ![微信小程序 Demo](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat.demo.png)
 
 
-[小程序 Demo 源码](https://github.com/xpmjs/wxdemo)
+[小程序 Demo 源码](https://git.oschina.net/xpmjs/wxdemo)
 
 
 
@@ -436,10 +436,10 @@ docker restart xpmjs-server
 **【下载代码】**
 
 使用  Git Bash , 进入小程序项目目录， 运行 git clone 拉去代码。（也可以
-使用 GitHub 等客户端 Clone 代码 ）
+使用 Git 等客户端 Clone 代码 ）
 
 ```bash
-git clone https://github.com/XpmJS/xpmjs.git xpmjs
+git clone https://git.oschina.net/xpmjs/xpmjs.git xpmjs
 
 ```
 
@@ -484,7 +484,7 @@ App({
 ```
 
 
-建议将 xpm、wss、session、stor 设定为全局变量。更多示例参考 [小程序Demo](https://github.com/xpmjs/wxdemo)
+建议将 xpm、wss、session、stor 设定为全局变量。更多示例参考 [小程序Demo](https://git.oschina.net/xpmjs/wxdemo)
 
 
 
