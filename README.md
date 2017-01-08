@@ -357,6 +357,8 @@ console.log(stor.getMapSync('map_name','key'));
 
 ### 7. 云端应用 ( App ) [**需将服务端升级到 1.0rc3 **]
 
+#### 调用示例
+
 ```javascript
 var xapp = app.xpm.require('App', 'xapp' );  // xapp 应用名称
 
@@ -377,6 +379,14 @@ xapp.api( 'ticket', 'available' )  // ticket 控制器  available 方法名
 });
 
 ```
+
+#### XpmJS 云端应用开发
+
+参考云端应用 Demo <火车票余票查询接口实现>
+
+https://git.oschina.net/xpmjs/xapp
+
+
 
 ### 8. 请求网址 ( Utils.fetch ) [**需将服务端升级到 1.0rc3 **]
 
