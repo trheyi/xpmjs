@@ -49,7 +49,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc2
+    tuanduimao/xpmjs-server:1.0rc3
 
 ```
 
@@ -438,7 +438,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc2
+    tuanduimao/xpmjs-server:1.0rc3
         
 ```
 
