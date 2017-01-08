@@ -427,12 +427,12 @@ utils.fetch( 'http://qcloud.com' ).then( function( resp ) {
 
 推荐使用[腾讯云](http://partners.qcloud.com/invitation/37360299583e2904ee602)（ 访问微信接口快, 可以免费申请 Https 证书 ） 
 
-方法1: 使用脚本安装 （ 目前仅支持 Ubuntu 14.04 64 LTS 操作系统）
+方法1: 使用脚本安装 （ **目前仅支持 Ubuntu 14.04 64 LTS 操作系统** ）
 
 创建一台云服务器，选择 **Ubuntu 14.04 64 LTS** 操作系统。 登录服务器运行以下脚本。
 
 ```bash
-wget http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com
+curl -sSL http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
 
 ```
 
