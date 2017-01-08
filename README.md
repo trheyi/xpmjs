@@ -355,7 +355,7 @@ console.log(stor.getMapSync('map_name','key'));
 
 ```
 
-### 7. 云端应用 ( App ) [**需将服务端升级到 1.0rc3 **]
+### 7. 云端应用 ( App ) *需将云端升级到 1.0rc3
 
 #### 调用示例
 
@@ -388,7 +388,7 @@ https://git.oschina.net/xpmjs/xapp
 
 
 
-### 8. 请求网址 ( Utils.fetch ) [**需将服务端升级到 1.0rc3 **]
+### 8. 请求网址 ( Utils.fetch ) *需将云端升级到 1.0rc3
 
 ```javascript
 var utils = app.xpm.require('Utils' );  // xapp 应用名称
