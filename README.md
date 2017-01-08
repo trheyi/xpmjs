@@ -355,14 +355,50 @@ console.log(stor.getMapSync('map_name','key'));
 
 ```
 
+### 7. 云端应用 ( App ) [**需将服务端升级到 1.0rc3 **]
+
+```javascript
+var xapp = app.xpm.require('App', 'xapp' );  // xapp 应用名称
+
+xapp.api( 'ticket', 'available' )  // ticket 控制器  available 方法名
+
+.post({
+    'train_date':'2017-01-26',
+    'from_station':'BJP',
+    'to_station':'SHH'
+})
+
+.then( function( resp ) {
+  console.log('POST RESP:', resp );
+})
+
+.catch( function( excp ) {
+  console.log('POST EXCP:', excp );
+});
+
+```
+
+### 8. 请求网址 ( Utils.fetch ) [**需将服务端升级到 1.0rc3 **]
+
+```javascript
+var utils = app.xpm.require('Utils' );  // xapp 应用名称
+
+utils.fetch( 'http://qcloud.com' ).then( function( resp ) {    
+    console.log('FETCH RESP:', resp );
+})
+
+.catch( function( excp ) {
+  console.log('FETCH EXCP:', excp );
+});
+
+```
+
 
 ## 三、微信小程序 Demo
 
 ![微信小程序 Demo](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat.demo.png)
 
-
 [小程序 Demo 源码](https://git.oschina.net/xpmjs/wxdemo)
-
 
 
 
