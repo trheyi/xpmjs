@@ -529,12 +529,17 @@ App({
 
 ```
 
-
 建议将 xpm、wss、session、stor 设定为全局变量。更多示例参考 [小程序Demo](https://git.oschina.net/xpmjs/wxdemo)
 
 
+## 五、XpmJS 交流群
 
-### F.A.Q.
+XpmJS 小程序开发微信交流群
+
+![小程序开发交流群](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/xpmjs.qun.png)
+
+
+## 六、F.A.Q.
 
 待整理
 
