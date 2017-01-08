@@ -29,9 +29,13 @@ XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可�
 
 **方法2: 安装脚本**
 
+安装前，建议先提前申请 Docker Hub 镜像
+[申请地址 https://www.daocloud.io/mirror](https://www.daocloud.io/mirror)
+
 ```bash
+
 # 使用 Ubuntu 14.04 64位 LTS
-wget http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com
+curl -sSL http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
 
 ```
 
