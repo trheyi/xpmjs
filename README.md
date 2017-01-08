@@ -382,9 +382,12 @@ xapp.api( 'ticket', 'available' )  // ticket 控制器  available 方法名
 
 #### XpmJS 云端应用开发
 
-参考云端应用 Demo <火车票余票查询接口实现>
+参考云端应用 Demo [<火车票余票查询接口实现>](https://git.oschina.net/xpmjs/xapp)
 
 https://git.oschina.net/xpmjs/xapp
+
+
+![应用安装](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/xappinstall.png)
 
 
 
