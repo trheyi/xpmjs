@@ -463,7 +463,7 @@ docker run -d --name=xpmjs-server  \
 **【上传 HTTPS 证书 & 微信支付证书】**
 
 访问：http://yourdomian.com/baas-admin/cert/index
-上传 HTTPS 证书和证书密钥，如已申请微信支付，需上传微信双向验证证书和密钥。
+上传 HTTPS 证书和证书密钥； 如已申请微信支付，建议尽量上传支付证书，用于双向验证证书和密钥，确保支付安全。
 
 ![https-cert.png](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/https-cert.png)
 
