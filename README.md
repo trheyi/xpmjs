@@ -431,6 +431,9 @@ utils.fetch( 'http://qcloud.com' ).then( function( resp ) {
 
 创建一台云服务器，选择 **Ubuntu 14.04 64 LTS** 操作系统。 登录服务器运行以下脚本。
 
+安装前，先提前申请 Docker Hub 镜像
+[申请地址 https://www.daocloud.io/mirror](https://www.daocloud.io/mirror)
+
 ```bash
 curl -sSL http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
 
