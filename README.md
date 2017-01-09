@@ -546,7 +546,7 @@ App({
 
 XpmJS 小程序开发微信交流群
 
-![小程序开发交流群](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/xpmjs.qun.png)
+![小程序开发交流群三](http://of2is3ok3.bkt.clouddn.com/xqun3.png)
 
 
 ## 六、F.A.Q.
