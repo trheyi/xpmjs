@@ -93,8 +93,11 @@ function User( option )  {
 						var userinfo = res.userInfo;
 
 						if ( that.ss.isVerified() ) {
-							resolve( userinfo );
-							return;
+							userinfo['_id'] = that.ss.get('_login_id') ||  null;
+							if ( userinfo['_id']  != null ) {
+								resolve( userinfo );
+								return;
+							}
 						}
 
 						var reqData = {
@@ -135,6 +138,8 @@ function User( option )  {
 								}
 
 								that.ss.id( res['data']['id'] ); // 设定服务端分配的ID 
+								that.ss.set('_login_id', res['data']['_id']);
+								userinfo['_id'] = res['data']['_id'];
 								resolve( userinfo );
 
 							},
