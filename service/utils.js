@@ -198,6 +198,66 @@ function Utils( option ) {
 
 	    return to;
 	}
+
+	/**
+	 * 获取当前的地理位置
+	 * @param  string type 默认为 wgs84  返回 gps 坐标
+	 * @return Promise
+	 */
+	this.getLocation = function( type ) {
+
+		type = type || 'wgs84';
+		return new Promise(function (resolve, reject) {
+			wx.getLocation({
+				type:type,
+				success:function( data ) {
+					resolve(data);
+					return;
+				},
+
+				fail: function( res ) {
+					reject(new Excp('调用地位信息失败',500, {
+						res:res,
+						type:type
+					}));
+					return;
+				}
+			});
+		});
+	}
+
+
+	/**
+	 * 打开地图选择位置
+	 * @return Promise
+	 */
+	this.chooseLocation = function() {
+
+		return new Promise(function (resolve, reject) {
+			wx.chooseLocation({
+
+				success:function( data ) {
+					resolve(data);
+					return;
+				},
+
+				fail: function( res ) {
+					if ( res.errMsg=='chooseLocation:fail cancel') {
+						reject(new Excp('用户取消调用',501, {
+							res:res
+						}));
+
+					} else {
+						reject(new Excp('打开地图选择位置接口失败',500, {
+							res:res
+						}));
+					}
+					return;
+				}
+			});
+		});
+	}
+
 }
 
 module.exports = Utils;
