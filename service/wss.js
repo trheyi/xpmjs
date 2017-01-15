@@ -194,9 +194,23 @@ function Wss( option ) {
 				resolve(true);
 				return 
 			}
-			
+
+			// wx.connectSocket BUG Android success （函数返回值不正确 ）
 			wx.connectSocket({
 				url: 'wss://' +  that.host + channel + '?_sid=' + that.ss.id() + '&_prefix=' + that.prefix + '&_table=' + that.table_name  + '&_user=' + that.user_table,
+				success:function( res, status ){},
+				fail: function( res ){
+					// console.log( 'wx.connectSocket fail', res);
+					reject( new Excp(
+					  	'WebSocket Error', 500, {
+					  		'res':res,
+					  		'isOpen': that.isOpen,
+					  		'channel':channel,
+					  		'host':that.host
+					  	}
+					));
+					return;
+				}
 			});
 
 			wx.onSocketOpen(function(res) {
@@ -214,7 +228,7 @@ function Wss( option ) {
 			});
 
 
-
+			// BUG Android 接收不到错误通知
 			wx.onSocketError(function(res){
 			  // that.isOpen = false;
 
@@ -224,14 +238,15 @@ function Wss( option ) {
 		  			} catch(e){}
 		  	  }
 
-			  reject( new Excp(
-			  	'WebSocket Error', 500, {
-			  		'res':res,
-			  		'isOpen': that.isOpen,
-			  		'channel':channel,
-			  		'host':that.host
-			  	}
+		  	  reject( new Excp(
+			   	'WebSocket Error', 500, {
+			   		'res':res,
+			   		'isOpen': that.isOpen,
+			   		'channel':channel,
+			   		'host':that.host
+			   	}
 			  ));
+
 			  return;
 			});
 
@@ -243,6 +258,7 @@ function Wss( option ) {
 		  				that.conn_events['close']( res );
 		  			} catch(e){}
 		  		}
+
 			});
 
 			wx.onSocketMessage(function( res ){
