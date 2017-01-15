@@ -167,6 +167,28 @@ function Utils( option ) {
 
 
 	/**
+	 * 检查变量是否为空
+	 * @param  mix obj string/number/object/array
+	 * @return boolen 为空返回 true 否则返回 false
+	 */
+	this.empty = function( obj ) {
+
+		if ( typeof obj == 'undefined' ) {
+			return true;
+		} else if ( typeof obj == 'string' && obj == '' ) {
+			return true;
+		} else if ( typeof obj == 'object' && Object.keys(obj).length == 0 ) {
+			return true;
+		} else if ( typeof obj == 'number' && Number.isNaN(obj) ) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+
+	/**
 	 * 合并多个Object 
 	 * @param  Object  n1, n2...  待合并的 Object
 	 * @return Object 
