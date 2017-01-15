@@ -18,6 +18,7 @@ function Wss( option ) {
 	this.tab = new Table( option, this.table_name );
 
 
+
 	/**
 	 * 读取当前线上用户
 	 * @return Promise
@@ -52,6 +53,54 @@ function Wss( option ) {
 			}
 			that.send('getConnections').catch( function( e ) {reject(e)} );
 		});
+	}
+
+
+
+
+
+
+
+	/**
+	 * 查询用户是否在线 （ xpm-server 1.0rc4 以上 ）
+	 * @param  string uid 用户ID
+	 * @return Promise 在线 true 不在线 false
+	 */
+	this.isOnline = function( uid ) {
+
+		var that = this;
+		return new Promise(function (resolve, reject) {
+
+			var eventBack = null;
+			if ( typeof that.events['ping'] == 'function' ) {
+				eventBack = that.events['ping'];
+			}
+
+			that.events['ping'] = function( res, status ) {
+
+				if ( eventBack != null ) {
+					that.events['ping'] = eventBack;
+				}
+				if ( status == 'success' ) {
+
+					if (  res.response.resp == 'pong' ) {
+						resolve(true);
+						return;
+					}
+
+					resolve(false);
+					return;
+				} else {
+					var error = res.error  || '读取用户在线信息失败';
+					reject(new Excp( error ,500, {
+						'status': status,
+						'res':res
+					}));
+				}
+			}
+			that.send('ping','user online', uid).catch( function( e ) {reject(e)} );
+		});
+
 	}
 
 
@@ -131,15 +180,21 @@ function Wss( option ) {
 	/**
 	 * 打开 Websocket 信道
 	 * @param  string channel 信道地址
+	 * @param  boolen ignore  true: 如果信道已连接反返回正确信息，默认为 true
 	 * @return Promise
 	 */
-	this.open = function( channel ) {
+	this.open = function( channel, ignore ) {
 		
 		var that = this;
+			if ( typeof ignore == 'undefined') ignore = true;
 
 		return new Promise(function (resolve, reject) {
-		
-
+			
+			if ( ignore && that.isOpen) {
+				resolve(true);
+				return 
+			}
+			
 			wx.connectSocket({
 				url: 'wss://' +  that.host + channel + '?_sid=' + that.ss.id() + '&_prefix=' + that.prefix + '&_table=' + that.table_name  + '&_user=' + that.user_table,
 			});
