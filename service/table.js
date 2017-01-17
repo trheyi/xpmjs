@@ -10,7 +10,17 @@ function table( option, table_name ) {
 	this.prefix= option['table.prefix'] || '';
 	this.api = 'https://' +  this.host + '/baas/table';
 	this.table_name = table_name || null;
-	this.queryBuilder = { where:[], limit:{}, order:[], paginate:{}, join:[], group:{} };
+	this.queryBuilder = { 
+			where:[], 
+			limit:{}, 
+			order:[], 
+			paginate:{}, 
+			join:[], 
+			leftjoin:[],
+			rightjoin:[],
+			group:{},
+			having:[]
+	};
 	this.sync = false;
 	this.ss = new Session( option );
 	this.ss.start();
@@ -175,7 +185,17 @@ function table( option, table_name ) {
 	 * @return this
 	 */
 	this.query = function () {
-		this.queryBuilder = { where:[], limit:{}, order:[], paginate:{} };
+		this.queryBuilder = { 
+			where:[], 
+			limit:{}, 
+			order:[], 
+			paginate:{}, 
+			join:[], 
+			leftjoin:[],
+			rightjoin:[],
+			group:{},
+			having:[]
+		};
 		return this;
 	}
 
@@ -224,12 +244,19 @@ function table( option, table_name ) {
 		this.orderby = this.orderBy;
 
 
-		this.groupBy = function() {
-
+		this.groupBy = function( field ) {
+			this.queryBuilder['group'] = {field:field};
+			return this;
 		}
 
 		this.groupby = this.groupBy;
 
+		this.having = function( field, exp, value ) {
+			this.queryBuilder['having'].push(
+				{ field:field, exp:exp, value:value}
+			);
+			return this;
+		}
 
 
 		/**
@@ -278,9 +305,31 @@ function table( option, table_name ) {
 		this.wherein = this.whereIn;
 
 
-		this.join = function() {
-
+		this.join = function( table, field, exp, value) {
+			this.queryBuilder['join'].push(
+				{table:table, field:field, exp:exp, value:value}
+			);
+			return this;
 		}
+
+		this.leftJoin = function( table, field, exp, value) {
+			this.queryBuilder['leftjoin'].push(
+				{table:table, field:field, exp:exp, value:value}
+			);
+			return this;
+		}
+
+		this.leftjoin = this.leftJoin;
+
+		this.rightJoin = function( table, field, exp, value) {
+			this.queryBuilder['rightjoin'].push(
+				{table:table, field:field, exp:exp, value:value}
+			);
+			return this;
+		}
+
+		this.rightjoin = this.rightJoin;
+
 
 
 		/**
