@@ -19,7 +19,8 @@ function table( option, table_name ) {
 			leftjoin:[],
 			rightjoin:[],
 			group:{},
-			having:[]
+			having:[],
+			inwhere:{}
 	};
 	this.sync = false;
 	this.ss = new Session( option );
@@ -194,7 +195,8 @@ function table( option, table_name ) {
 			leftjoin:[],
 			rightjoin:[],
 			group:{},
-			having:[]
+			having:[],
+			inwhere:{}
 		};
 		return this;
 	}
@@ -298,11 +300,22 @@ function table( option, table_name ) {
 		}
 
 
-		this.whereIn = function() {
+		this.inWhere = function( field,  whereTable, whereField, getFields ) {
+			
+			getFields = getFields || ['*'];
+			whereField = whereField || '_id';
+
+			this.queryBuilder['inwhere'][field] = { 
+				field:field, table:whereTable,  where:whereField, fields:getFields
+			};
+
+			return this;
 
 		}
 
-		this.wherein = this.whereIn;
+		this.inwhere = this.inWhere;
+
+
 
 
 		this.join = function( table, field, exp, value) {
