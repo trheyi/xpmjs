@@ -10,7 +10,7 @@ function table( option, table_name ) {
 	this.prefix= option['table.prefix'] || '';
 	this.api = 'https://' +  this.host + '/baas/table';
 	this.table_name = table_name || null;
-	this.queryBuilder = { where:[], limit:{}, order:[], paginate:{} };
+	this.queryBuilder = { where:[], limit:{}, order:[], paginate:{}, join:[], group:{} };
 	this.sync = false;
 	this.ss = new Session( option );
 	this.ss.start();
@@ -224,6 +224,14 @@ function table( option, table_name ) {
 		this.orderby = this.orderBy;
 
 
+		this.groupBy = function() {
+
+		}
+
+		this.groupby = this.groupBy;
+
+
+
 		/**
 		 * 构造 Limit 查询
 		 * 
@@ -260,6 +268,18 @@ function table( option, table_name ) {
 			perpage = perpage || 20;
 			this.queryBuilder['paginate'] = { perpage:perpage, fields:fields, link:link, page:page};
 			return this;
+		}
+
+
+		this.whereIn = function() {
+
+		}
+
+		this.wherein = this.whereIn;
+
+
+		this.join = function() {
+
 		}
 
 

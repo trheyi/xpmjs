@@ -4,9 +4,103 @@ var Session = require('session.js');
 var Table = require('table.js');
 var Utils = require('utils.js');
 
+
+/**
+ * 发起支付请求
+ * @param  object option 
+ * @return 
+ *
+ * var pay = app.xpm.require('Pay');
+ *
+ * // 快速
+ * pay.request({
+ *     total_fee:500,  // 单位分
+ *     body:'算命、服务器开光',
+ *     attach:'HELLO XpmJS.com', 
+ *     detail:'{id:888,desp:"算命,抽SSR,赠送服务器开光"}'
+ * }).then(function( data ){
+ *     console.log('Request Pay Success', data );
+ * }).catch( function( excp){
+ *     console.log('Request Pay Failure', excp );
+ * });
+ *
+ *
+ * // 高级用法 ( require xpmjs-server 1.0rc4 )
+ *
+ * pay.before('create', {  // 创建充值记录 (统一下单成功后, 发起支付前, 在云端运行 )
+ * 	'table':'income',
+ * 	'data': {
+ * 		sn:'{{sn}}',
+ * 		order_sn: data.order.sn,
+ * 		uid:data.order.uid,
+ * 		amount:data.order.sale_price,
+ * 		amount_free:0,
+ * 		status:'PENDING',
+ * 		status_tips:"F请求付款"
+ * 	}
+ * })
+ * 
+ * .order({   // 生成订单  ( 统一下单接口, 仅设定并不发送请求 )
+ *     total_fee:data.order.sale_price,  // 单位分
+ *     body:data.order.show_name,
+ *     attach:'attach user is ' + mid,  // 应该是当前登录用户的 ID 
+ *     detail:data
+ * })
+ * 
+ * .success('update', { // 更新充值记录 （ 支付成功后回调，在云端运行 ）
+ * 	'table':'income',
+ * 	'data': {
+ * 		sn:'{{sn}}',
+ * 		status:'DONE',
+ * 		status_tips:"income status_tips field"
+ * 	},
+ * 	'unique':'sn'
+ * })
+ 
+ * .success('app', {   // 调用APP 示例 （ 支付成功后回调，在云端运行 ）
+ * 	'name':'xapp',
+ * 	'api':['ticket','index',{sn:'{{sn}}','status_tips':"{{0.status_tips}}"}],
+ * 	'data': {
+ * 		sn:'{{sn}}',
+ * 		status:'DONE'
+ * 	}
+ * })
+ * 
+ * .success('update', {  // 更新订单状态 （ 支付成功后回调，在云端运行 ）
+ * 	'table':'order',
+ * 	'data': {
+ * 		_id:oid,
+ * 		status:'PENDING'
+ * 	}
+ * })
+ * 
+ * .success('create', {   // 创建消费记录 （ 支付成功后回调，在云端运行 ）
+ * 	'table':'payout',
+ * 	'data': {
+ * 		sn:'{{sn}}',
+ * 		order_sn: data.order.sn,
+ * 		uid:data.order.uid,
+ * 		amount:data.order.sale_price,
+ * 		amount_free:0,
+ * 		status:'DONE',
+ * 		status_tips:"F请求付款"
+ * 	}
+ * })
+ * 
+ * .request().then(function( payResp  ) {  // 发起请求
+ * 	
+ * 	app.wss.send('payment.answer', {code:0, payment:payResp, id:oid}, mid );
+ * 
+ * }).catch(function( excp) {
+ * 	app.wss.send('payment.answer', {code:500,excp:excp}, mid );
+ * });		
+ *
+ * 
+ */
 function Pay( option ) {
 
 	option = option || {};
+
 
 	var utils = new Utils( option );
 
@@ -16,7 +110,7 @@ function Pay( option ) {
 	this.ss = new Session( option );
 	this.ss.start();
 	this.cloudEvents = {'before':[], 'success':[], 'complete':[], 'fail':[] };
-
+	this.params =  {};
 
 	/**
 	 * 发起微信支付请求
@@ -29,6 +123,8 @@ function Pay( option ) {
 	 */
 	this.request = function( params ) {
 		
+		params = params || this.params;
+
 		var that = this;
 
 		return new Promise(function (resolve, reject) {
@@ -120,6 +216,23 @@ function Pay( option ) {
 	this.before = function( cmd, params ) {
 		return this.runAtCloud( 'before', cmd, params);
 	}
+
+
+	/**
+	 * 统一下单接口
+	 * 
+	 * @see https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1
+	 * @param  array params 支付请求参数 
+	 *         params['total_fee'] & params['body'] 必须填写
+	 *         
+	 * @return Promise
+	 */
+	this.order = function( params ) {
+
+		this.params = params;
+		return this;
+	}
+
 
 
 	/**
