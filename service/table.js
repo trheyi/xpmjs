@@ -350,7 +350,9 @@ function table( option, table_name ) {
 		 * @return Promise 
 		 */
 		this.fetch = function() {
-			return this.__r('/query', {fields:arguments, query:this.queryBuilder});
+			var fields = arguments;
+			if ( fields.length == 0  ) fields = ['*'];
+			return this.__r('/query', {fields:fields, query:this.queryBuilder});
 		}
 
 
