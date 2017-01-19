@@ -151,7 +151,7 @@ function Pay( option ) {
 					   			 typeof params['_events']['complete'] == 'object'   ) {
 					   			
 
-					   			utils.request('POST', that.api + '/return', {	
+					   			utils.request('POST', that.api + '/payreturn', {	
 					   			   '_prefix':that.prefix,
 					   			   'sn':data['sn'],
 								   'timeStamp': data['timeStamp'].toString(),
