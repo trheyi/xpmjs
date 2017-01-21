@@ -65,6 +65,26 @@ function App( option, app_name ) {
 		return this.utils.request('POST', api, data, opt );
 	}
 
+	
+	this.upload = function( tmpFile, name, data, json ) {
+
+		name = name || 'wxfile';
+		data = data || {};
+		var query = [], queryString ='',  api=this.apihost,  opt={};
+		for( var field in this.query ) {
+			query.push(field + '=' + this.query[field]);
+		}
+
+		if ( typeof json == 'undefined' || json === true ) {
+			opt['dataType'] = 'json';
+		} else {
+			opt['dataType'] = 'text';
+		}
+
+		api  +=  '?' + query.join('&');
+
+		return this.utils.upload(tmpFile, name, api, data, opt );
+	}
 
 }
 

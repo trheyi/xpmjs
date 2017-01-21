@@ -61,6 +61,106 @@ function Utils( option ) {
 	}
 
 
+	/**
+	 * 上传文件到云端
+	 * @param  string tmpFile 上传文件资源的路径
+	 * @param  string api     云端API地址
+	 * @param  string name     文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+	 * @param  object data    formData
+	 * @param  object option 选项
+	 * @return Promise
+	 */
+	this.upload = function( tmpFile, name, api, data, option ) {
+		
+		option = option || {};
+		data = data || {};
+		option['header'] = option['header'] || {'content-type': 'application/json'};
+		option['dataType'] = option['dataType'] || 'json';
+
+		return new Promise(function (resolve, reject) {
+			wx.uploadFile({
+				url:api,
+				filePath:tmpFile,
+				name:name,
+				formData:data,
+				header:option['header'],
+				success:function(res){
+
+					if ( res.statusCode != 200 ) {
+						reject(new Excp('上传文件失败', res.statusCode, {
+							res:res,
+							tmpFile:tmpFile, 
+							name:name, 
+							api:api, 
+							data:data, 
+							option:option
+						}));
+						return;
+					}
+
+					if ( typeof res['data'] == 'string' && option['dataType'] == 'json') {
+
+						try { res['data'] = JSON.parse(res['data']) } catch(e){
+							reject(new Excp('上传文件失败 ' + e.message ,500, {
+								res:res,
+								tmpFile:tmpFile, 
+								name:name, 
+								type:typeof res['data'],
+								api:api, 
+								data:data, 
+								option:option
+							}));
+						}
+
+					}
+
+					if ( typeof res['data'] != 'object' && option['dataType'] == 'json') {
+						reject(new Excp('上传文件失败 Json Error',500, {
+							res:res,
+							tmpFile:tmpFile, 
+							name:name, 
+							type:typeof res['data'],
+							api:api, 
+							data:data, 
+							option:option
+						}));
+						return;
+					}
+
+					if ( typeof res['data']['code'] != 'undefined' &&  res['data']['code']  != 0 ) {
+						res['data']['message'] = res['data']['message'] || 'Server Gone';
+
+						reject(new Excp('上传文件失败 ' + res['data']['message'],500, {
+							res:res,
+							tmpFile:tmpFile, 
+							name:name, 
+							api:api, 
+							data:data, 
+							option:option
+						}));
+						return;
+					}
+
+					resolve( res['data'] );
+
+				},
+				fail:function(res){
+					reject(new Excp('上传文件失败',500, {
+						res:res,
+						tmpFile:tmpFile, 
+						name:name, 
+						api:api, 
+						data:data, 
+						option:option
+					}));
+				}
+			});
+
+		});
+
+	}
+
+
 
 	/**
 	 * 
@@ -68,7 +168,7 @@ function Utils( option ) {
 	 * 
 	 * @param  string method 方法 GET/POST/PUT/DELETE ..
 	 * @param  string api API 地址
-	 * @param  string data  post data
+	 * @param  object data  post data
 	 * @param  object option 选项
 	 * @return Promise
 	 */
