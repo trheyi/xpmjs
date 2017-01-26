@@ -11,6 +11,7 @@ function Wss( option ) {
 	this.host = option['wss'] || option['host'];
 	this.ss = new Session( option );
 	this.ss.start();
+	this.cid =  option.app || '';
 
 	this.prefix= option['table.prefix'] || '';
 	this.table_name = option['ws.table'] || 'message';
@@ -197,7 +198,7 @@ function Wss( option ) {
 
 			// wx.connectSocket BUG Android success （函数返回值不正确 ）
 			wx.connectSocket({
-				url: 'wss://' +  that.host + channel + '?_sid=' + that.ss.id() + '&_prefix=' + that.prefix + '&_table=' + that.table_name  + '&_user=' + that.user_table,
+				url: 'wss://' +  that.host + channel + '?_sid=' + that.ss.id() + '&_prefix=' + that.prefix + '&_table=' + that.table_name  + '&_user=' + that.user_table+ '&_cid=' + that.cid,
 				success:function( res, status ){},
 				fail: function( res ){
 					// console.log( 'wx.connectSocket fail', res);

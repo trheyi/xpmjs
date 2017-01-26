@@ -14,6 +14,7 @@ function User( option )  {
 	this.table_name = option['user.table'] || 'user';
 	this.api = 'https://' +  this.host + '/baas/user';
 	this.tab = new Table( option, this.table_name );
+	this.cid =  option.app || '';
 
 
 	// 用户退出
@@ -24,6 +25,7 @@ function User( option )  {
 
 			var reqData = {
 				_sid:that.ss.id(), 
+				_cid:that.cid,
 				_table:that.table_name,
 				_prefix:that.prefix,
 			};
@@ -102,6 +104,7 @@ function User( option )  {
 
 						var reqData = {
 							_sid:that.ss.id(), 
+							_cid:that.cid,
 							_table:that.table_name,
 							_prefix:that.prefix,
 							code: coderes.code,

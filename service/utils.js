@@ -9,8 +9,10 @@ var Excp = require('excp.js');
 
 function Utils( option ) {
 
+	option = option || {};
 	this.ss = new Session( option );
 	this.host = option['https'] || option['host'];
+	this.cid =  option.app || '';
 
 	/**
 	 * 生成一个 Guid
@@ -178,6 +180,7 @@ function Utils( option ) {
 		option['dataType'] = option['dataType'] || 'json';
 		data = data || {};
 		data["_sid"] = this.ss.id();
+		data["_cid"] = this.cid;
 
 		return new Promise(function (resolve, reject) {
 

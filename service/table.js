@@ -25,6 +25,7 @@ function table( option, table_name ) {
 	this.sync = false;
 	this.ss = new Session( option );
 	this.ss.start();
+	this.cid =  option.app || '';
 	
 
 	/**
@@ -444,6 +445,7 @@ function table( option, table_name ) {
 		data = data || {}
 		api = api || 'index';
 		data['_sid'] = that.ss.id();
+		data['_cid'] = that.cid;
 		data['_table'] = that.table_name;
 		data['_prefix'] = that.prefix;
 		
