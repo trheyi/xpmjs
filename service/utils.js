@@ -15,6 +15,13 @@ function Utils( option ) {
 	this.cid =  option.app || '';
 
 
+	this.send = function( data ) {
+		var api  = 'https://' +  this.host + '/baas/utils/send';
+			data = data || {};
+		return this.request( 'POST', api, data);
+	}
+
+
 	/**
 	 * 返回二维码地址 ( 1.0 RC5 )
 	 * @param  string content 二维码内容
