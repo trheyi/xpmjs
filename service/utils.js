@@ -14,6 +14,43 @@ function Utils( option ) {
 	this.host = option['https'] || option['host'];
 	this.cid =  option.app || '';
 
+
+	/**
+	 * 返回二维码地址 ( 1.0 RC5 )
+	 * @param  string content 二维码内容
+	 * @param  object option 配置项
+	 *         number option.size   大小(长宽) 默认 300 
+	 *         number option.padding  边距  默认 10 
+	 *         string option.foreground  前景色 默认 '0,0,0,0' r,g,b,a 白色不透明
+	 *         string option.background  背景色 默认  '255,255,255,0' r,g,b,a 黑色不透明
+	 *         string option.font  字体 默认 'LantingQianHei.ttf'  有效值 ('elephant.ttf'/'LantingQianHei.ttf'/'LantingHei.ttc'/'STHeitiLight.ttc'/'STHeitiMedium.ttc')
+	 *         number option.fontsize  字体大小 默认 14
+	 *         string option.label  底部标签名称 默认 '扫描二维码'
+	 *         
+	 * @return string 二维码图片地址
+	 */
+	this.qrImageUrl = function( content, option ) {
+		var api  = 'https://' +  this.host + '/baas/utils/qrcode';
+		var query = option || {}, queryString = [];
+		query['code'] = escape(content);
+		query['size'] = query['size'] || 300;
+		query['padding'] =  query['padding'] || 10;
+		query['foreground'] = query['foreground']  || '0,0,0,0';
+		query['background'] = query['background']  || '255,255,255,0';
+		query['font'] = query['font']  || 'LantingQianHei.ttf';
+		query['fontsize'] = query['fontsize']  || 14;
+		query['label'] = query['label']  || '扫描二维码';
+		query["_sid"] = this.ss.id();
+		query["_cid"] = this.cid;
+
+		for( var key in query  ) {
+			queryString.push( key + '=' + query[key]);
+		}
+		return api + '?' + queryString.join('&');
+
+	}
+
+
 	/**
 	 * 生成一个 Guid
 	 * @return GUID
