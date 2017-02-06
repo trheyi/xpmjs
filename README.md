@@ -53,7 +53,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc3
+    tuanduimao/xpmjs-server:1.0rc5
 
 ```
 
@@ -153,6 +153,30 @@ wss.liveUsers().then(function( users ) {
 | group | 用户组 | |
 | isadmin | 是否是管理员| 0 非管理员 1 管理员 |
 
+
+#### 检查用户是否在线 isOnline ( xpmjs-server 1.0rc4+  )
+
+```javascript
+
+var user = app.xpm.require('User');
+var wss = app.xpm.require('Wss');
+
+user.login().then( function( userInfo ) { 
+    return wss.isOnline( userInfo['_id'] )
+    
+}).then function( isOnline ) {
+    if ( isOnline ) {
+        console.log( '用户在线');
+    } else {
+        console.log( '用户离线');
+    }
+})
+.catch( function( excp ) { 
+    console.log('出错啦', excp );
+});
+
+
+```
 
 
 #### 监听指令 listen()
@@ -328,6 +352,98 @@ table.query()
     
 ```
 
+#### 联合查询 join(), leftjoin(), rightjoin() (xpmjs-server 1.0rc4+) 
+
+
+Table 1: `User`
+
+| id | name |title |
+| :-: | :-: | :-: |
+| 1   |  张三  | 产品经理 |
+| 2   |  李四  | 工程师 |
+| 3   |  王五  | 运维工程师 |
+
+Table 2: `Project`
+
+| id | name | uid |
+| :-: | :-: | :-: |
+| 1   |  小程序开发组 | 1 |
+| 2   |  网页开发组  | 3 |
+
+```javascript
+var table = app.xpm.require('Table', 'Project');
+table.query()
+    .join('User', 'User.id', '=', 'Project.uid' )  // leftjoin / rightjoin
+    .limit(1)  
+.fetch('User.id as userid', 'User.name as username', 'Project.*').then(function(data) {  
+    console.log( '查询结果', data ); 
+})
+
+```
+
+返回值
+
+```json
+[
+	{
+		"id":1,
+		"name":"小程序开发组"
+		"userid":1,
+		"username":"产品经理"
+		
+	}
+]
+```
+
+#### inWhere 查询 inWhere()
+
+
+Table 1: `User`
+
+| id | name |title |
+| :-: | :-: | :-: |
+| 1   |  张三  | 产品经理 |
+| 2   |  李四  | 工程师 |
+| 3   |  王五  | 运维工程师 |
+
+Table 2: `Project`
+
+| id | name | users |
+| :-: | :-: | :-: |
+| 1   |  小程序开发组 | ["1","2","3"] |
+| 2   |  网页开发组  |  ["1", "3"] |
+
+```javascript
+var table = app.xpm.require('Table', 'Project');
+table.query()
+    .inWhere('users', 'User', 'id', '*' )
+    .limit(1)  
+.fetch('User.id as userid', 'User.name as username', 'Project.*').then(function(data) {  
+    console.log( '查询结果', data ); 
+})
+
+```
+
+返回值
+
+```json
+[
+	{
+		"id":1,
+		"name":"小程序开发组"
+		"users":[
+			{
+				"id":1,
+				"name":"张三",
+				"title":"产品经理"
+			}
+			...
+		]
+		
+	}
+]
+```
+
 ### 5. 微信支付 ( Pay )
 
 #### 发起支付 request();
@@ -347,6 +463,75 @@ pay.request({
 
 ```
 
+#### 云端事件 before(), success(), fail(), complete() (xpmjs-server 1.0rc4+)
+
+```javascript
+pay.before('create', {  // 创建充值记录 (统一下单成功后, 发起支付前, 在云端运行 )
+	'table':'income',
+	'data': {
+		sn:'{{sn}}',
+		order_sn: data.order.sn,
+		uid:data.order.uid,
+		amount:data.order.sale_price,
+		amount_free:0,
+		status:'PENDING',
+		status_tips:"F请求付款"
+	}
+})
+
+.order({   // 生成订单  ( 统一下单接口, 仅设定并不发送请求 )
+    total_fee:data.order.sale_price,  // 单位分
+    body:data.order.show_name,
+    attach:'attach user is ' + mid,  // 应该是当前登录用户的 ID 
+    detail:data
+})
+
+.success('update', { // 更新充值记录 （ 支付成功后回调，在云端运行 ）
+	'table':'income',
+	'data': {
+		sn:'{{sn}}',
+		status:'DONE',
+		status_tips:"income status_tips field"
+	},
+	'unique':'sn'
+})
+
+.success('app', {   // 调用APP 示例 （ 支付成功后回调，在云端运行 ）
+	'name':'xapp',
+	'api':['ticket','index',{sn:'{{sn}}','status_tips':"{{0.status_tips}}"}],
+	'data': {
+		sn:'{{sn}}',
+		status:'DONE'
+	}
+})
+
+.success('update', {  // 更新订单状态 （ 支付成功后回调，在云端运行 ）
+	'table':'order',
+	'data': {
+		_id:oid,
+		status:'PENDING'
+	}
+})
+
+.success('create', {   // 创建消费记录 （ 支付成功后回调，在云端运行 ）
+	'table':'payout',
+	'data': {
+		sn:'{{sn}}',
+		order_sn: data.order.sn,
+		uid:data.order.uid,
+		amount:data.order.sale_price,
+		amount_free:0,
+		status:'DONE',
+		status_tips:"F请求付款"
+	}
+})
+
+.request().then(function( payResp  ) {  // 发起请求
+	console.log( payResp );
+})
+```
+
+
 ### 6. 本地存储 ( Stor ) 
 
 ```javascript
@@ -359,7 +544,7 @@ console.log(stor.getMapSync('map_name','key'));
 
 ```
 
-### 7. 云端应用 ( App ) *需将云端升级到 1.0rc3
+### 7. 云端应用 ( App ) (xpmjs-server 1.0rc3+)
 
 #### 调用示例
 
@@ -394,11 +579,69 @@ https://git.oschina.net/xpmjs/xapp
 ![应用安装](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/xappinstall.png)
 
 
-
-### 8. 请求网址 ( Utils.fetch ) *需将云端升级到 1.0rc3
+### 8. 云端队列 ( Que.js ) (xpmjs-server 1.0rc4+)
 
 ```javascript
-var utils = app.xpm.require('Utils' );  // xapp 应用名称
+var que = app.xpm.require('Que', 'hello');
+que.select('world').push('create', {  // 增加数据
+	table:'payout',
+	data: {
+		sn:'200193',
+		order_sn:'test29993',
+		amount:100,
+		status:'DONE'
+	}
+}).push('update', { // 更新数据
+	table:'order',
+	data: {
+		sn:'148457330261256',
+		status_tips:'{{0.sn}} {{0.status}}'
+	},
+	unique:'sn'
+}).push('app', {   // 调用APP 示例
+	'name':'xapp',
+	'api':['ticket','index',{sn:'{{0.sn}}'}],
+	'data': {
+		sn:'{{0.sn}} {{1.sn}}',
+		status:'DONE'
+	}
+}).run().then(function(resp){
+	console.log( 'Response', resp );
+})
+.catch(function(excp){
+	console.log( 'Error', excp );
+})
+```
+
+
+### 9. 文件上传 Utils.upload  &  App.upload  (xpmjs-server 1.0rc5+)
+
+上传文件到腾讯云对象存储 
+ 
+```javascript
+var qcloud = app.xpm.require('app', 'xqcloud');
+qcloud.api("cos",'upload')
+
+.upload( tempFilePaths[0] )
+.then(function(data){
+	that.setData({
+		'rs.corver':data.access_url,
+		'rs.images':[data.access_url]
+	});
+})
+.catch( function(excp){
+	console.log('Upload Fail', excp );
+});
+```
+
+
+### 10. 常用方法 (  Utils )
+
+  
+#### 请求网址 ( Utils.fetch ) (xpmjs-server 1.0rc3+)
+
+```javascript
+var utils = app.xpm.require('Utils' );  
 
 utils.fetch( 'http://qcloud.com' ).then( function( resp ) {    
     console.log('FETCH RESP:', resp );
@@ -408,6 +651,17 @@ utils.fetch( 'http://qcloud.com' ).then( function( resp ) {
   console.log('FETCH EXCP:', excp );
 });
 
+```
+
+
+#### 生成二维码图片 ( Utils.qrImageUrl ) (xpmjs-server 1.0rc5+)
+
+返回二维码图片地址
+
+```javascript
+var utils = app.xpm.require('Utils' ); 
+var url = utils.qrImageUrl('hello world', {size:200});
+console.log( url );
 ```
 
 
@@ -448,7 +702,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc3
+    tuanduimao/xpmjs-server:1.0rc5
         
 ```
 
@@ -517,6 +771,7 @@ App({
 
     // 创建 xpm 对象
     this.xpm = require('xpmjs/xpm.js').option({
+        'app':1,  // 对应后台 APP 配置，支持5个
         'host':'yourdomian.com',
         'https':'yourdomian.com',
         'wss': 'yourdomian.com/ws-server',

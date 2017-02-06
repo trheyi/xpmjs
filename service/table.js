@@ -301,6 +301,54 @@ function table( option, table_name ) {
 		}
 
 
+		/**
+		 * inWhere 查询
+		 *
+		 *  Table 1: User
+		 *  id  |  name | title
+		 *  :=: |  :=:  | :=: 
+		 *  1   |  张三  | 产品经理
+		 *  2   |  李四  | 工程师
+		 *  3   |  王五  | 运维工程师
+		 *  
+		 *  Table 2: Project
+		 *  id  |  name | users 
+		 *  :=: |  :=:  | :=: 
+		 *  1   |  小程序开发组 | ["1","2","3"]
+		 *  2   |  网页开发组  | ["1", "3"]
+		 *
+		 *  ProjectTable.query()
+		 *  	 .inWhere('users', 'User', 'id', '*' )
+		 *  .fetch('*').then(function( data) {
+		 *  	console.log( data );
+		 *  })
+		 *
+		 *  查询结果
+		 *  [
+		 *  	...
+		 *  	{
+		 *  		"id":1,
+		 *  		"name":"小程序开发组"
+		 *  		"users":[
+		 *  			...
+		 *  			{
+		 *  				"id":1,
+		 *  				"name":"张三",
+		 *  				"title":"产品经理"
+		 *  			}
+		 *  			...
+		 *  		]
+		 *  		
+		 *  	}
+		 *  	...
+		 *  ]
+		 *  
+		 * @param  string field      JSON字段
+		 * @param  string whereTable 查询数据表
+		 * @param  string whereField 关联数据表的字段
+		 * @param  string getFields  关联数据表的数据总量
+		 * @return this
+		 */
 		this.inWhere = function( field,  whereTable, whereField, getFields ) {
 			
 			getFields = getFields || ['*'];
@@ -317,8 +365,46 @@ function table( option, table_name ) {
 		this.inwhere = this.inWhere;
 
 
-
-
+		/**
+		 * join 
+		 *
+		 *  Table 1: User
+		 *  id  |  name | title
+		 *  :=: |  :=:  | :=: 
+		 *  1   |  张三  | 产品经理
+		 *  2   |  李四  | 工程师
+		 *  3   |  王五  | 运维工程师
+		 *  
+		 *  Table 2: Project
+		 *  id  |  name | uid 
+		 *  :=: |  :=:  | :=: 
+		 *  1   |  小程序开发组 | 1
+		 *  2   |  网页开发组  | 3
+		 *
+		 *  ProjectTable.query()
+		 *  	 .join('User', 'User.id', '=', 'Project.uid' )
+		 *  	 .limit(1)
+		 *  .fetch('User.id as userid', 'User.name as username', 'Project.*').then(function( data) {
+		 *  	console.log( data );
+		 *  })
+		 *
+		 *  查询结果
+		 *  [
+		 *  	{
+		 *  		"id":1,
+		 *  		"name":"小程序开发组"
+		 *  		"userid":1,
+		 *  		"username":"产品经理"
+		 *  		
+		 *  	}
+		 *  ]
+		 *  
+		 * @param  string table 关联表名称
+		 * @param  string field 表一关联字段
+		 * @param  string exp   关系操作符 ( =, <> , > , <, like ... )
+		 * @param  string value 表二关联字段
+		 * @return this
+		 */
 		this.join = function( table, field, exp, value) {
 			this.queryBuilder['join'].push(
 				{table:table, field:field, exp:exp, value:value}
@@ -326,6 +412,14 @@ function table( option, table_name ) {
 			return this;
 		}
 
+		/**
+		 * leftJoin 
+		 * @param  string table 关联表名称
+		 * @param  string field 表一关联字段
+		 * @param  string exp   关系操作符 ( =, <> , > , <, like ... )
+		 * @param  string value 表二关联字段
+		 * @return this
+		 */
 		this.leftJoin = function( table, field, exp, value) {
 			this.queryBuilder['leftjoin'].push(
 				{table:table, field:field, exp:exp, value:value}
@@ -335,6 +429,14 @@ function table( option, table_name ) {
 
 		this.leftjoin = this.leftJoin;
 
+		/**
+		 * rightJoin 
+		 * @param  string table 关联表名称
+		 * @param  string field 表一关联字段
+		 * @param  string exp   关系操作符 ( =, <> , > , <, like ... )
+		 * @param  string value 表二关联字段
+		 * @return this
+		 */
 		this.rightJoin = function( table, field, exp, value) {
 			this.queryBuilder['rightjoin'].push(
 				{table:table, field:field, exp:exp, value:value}
