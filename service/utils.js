@@ -1,4 +1,4 @@
-require('../lib/promise-7.0.4.min.js');
+if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
 var Session = require('session.js');
 var Excp = require('excp.js');
 

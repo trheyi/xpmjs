@@ -1,7 +1,18 @@
 function xpm( opt ) {
 
 	this.opt = opt || {};
-	
+
+	this.getPromise = function(){
+		return require('lib/promise.min.js').Promise;
+	}
+
+
+	/**
+	 * 载入服务文件
+	 * @param  {[type]} service_name [description]
+	 * @param  {[type]} params       [description]
+	 * @return {[type]}              [description]
+	 */
 	this.require = function ( service_name, params  ) {
 		var se = require( 'service'  +  '/' + service_name.toLowerCase() + '.js' );
 		params = params || {};
