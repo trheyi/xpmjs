@@ -3,7 +3,7 @@ function xpm( opt ) {
 	this.opt = opt || {};
 
 	this.getPromise = function(){
-		if ( typeof Promise == 'undefined' ) { var _Promise = require('lib/promise.min.js').Promise; } else { var _P = Promise } 
+		if ( typeof Promise == 'undefined' ) { var _Promise = require('lib/promise.min.js').Promise; } else { var _Promise = Promise } 
 		return _Promise;
 	}
 
