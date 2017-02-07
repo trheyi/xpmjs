@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Excp = require('excp.js');
 var Session = require('session.js');
 
@@ -553,7 +553,7 @@ function table( option, table_name ) {
 		
 		// data['_input'] = JSON.stringify( data );
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			wx.request({
 				url: that.api + api,
 				data: data, // 

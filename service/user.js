@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Excp = require('excp.js');
 var Session = require('session.js');
 var Table = require('table.js');
@@ -21,7 +21,7 @@ function User( option )  {
 	this.logout = function() {
 		
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			var reqData = {
 				_sid:that.ss.id(), 
@@ -79,7 +79,7 @@ function User( option )  {
 	this.login = function() {
 		
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			wx.login({
 				success: function( coderes ) {
@@ -174,7 +174,7 @@ function User( option )  {
 
 	this.get = function() {
 		
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			
 			wx.getUserInfo({
       			success: function(res) {

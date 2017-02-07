@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Excp = require('excp.js');
 var Session = require('session.js');
 var Utils = require('utils.js');

@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 
 var Excp = require('excp.js');
 var Session = require('session.js');
@@ -28,7 +28,7 @@ function Wss( option ) {
 	this.liveUsers = function() {
 
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			var eventBack = null;
 			if ( typeof that.events['getConnections'] == 'function' ) {
@@ -71,7 +71,7 @@ function Wss( option ) {
 	this.isOnline = function( uid ) {
 
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			var eventBack = null;
 			if ( typeof that.events['ping'] == 'function' ) {
@@ -149,7 +149,7 @@ function Wss( option ) {
 
 		var that = this;
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			
 			if (that.isOpen !== true ) {
 				reject(new Excp('WebSocket未连接', 401, {
@@ -190,7 +190,7 @@ function Wss( option ) {
 		var that = this;
 			if ( typeof ignore == 'undefined') ignore = true;
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			
 			if ( ignore && that.isOpen) {
 				resolve(true);

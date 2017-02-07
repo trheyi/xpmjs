@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Excp = require('excp.js');
 
 function Stor( option ) {
@@ -14,7 +14,7 @@ function Stor( option ) {
 	this.set = function( key, value ) {
 
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			
 			if ( typeof key == 'undefined' ) {
 				reject( new Excp('请输入关键词',500, {key:key, value:value}) );
@@ -41,7 +41,7 @@ function Stor( option ) {
 	this.get = function( key ) {
 
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			
 			if ( typeof key == 'undefined' ) {
 				reject( new Excp('请输入关键词',500, {key:key}) );
@@ -100,7 +100,7 @@ function Stor( option ) {
 	this.setMap = function( name, key, value ) {
 
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			that.get( name )
 			.then( function(data) {
@@ -140,7 +140,7 @@ function Stor( option ) {
 	 */
 	this.getMap = function( name, key ) {
 		var that = this;
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			that.get( name )
 			.then( function(data) {
 				data[key] = value;

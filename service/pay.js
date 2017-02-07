@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Excp = require('excp.js');
 var Session = require('session.js');
 var Table = require('table.js');
@@ -127,7 +127,7 @@ function Pay( option ) {
 
 		var that = this;
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			params['_events'] = that.cloudEvents;
 			params['_prefix'] = that.prefix;

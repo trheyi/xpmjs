@@ -1,4 +1,4 @@
-if ( typeof Promise == 'undefined' ) { var Promise = require('../lib/promise.min.js').Promise; }
+if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Session = require('session.js');
 var Excp = require('excp.js');
 
@@ -123,7 +123,7 @@ function Utils( option ) {
 		option['header'] = option['header'] || {'content-type': 'application/json'};
 		option['dataType'] = option['dataType'] || 'json';
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			wx.uploadFile({
 				url:api,
 				filePath:tmpFile,
@@ -226,7 +226,7 @@ function Utils( option ) {
 		data["_sid"] = this.ss.id();
 		data["_cid"] = this.cid;
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 
 			wx.request({
 				url: api,
@@ -376,7 +376,7 @@ function Utils( option ) {
 	this.getLocation = function( type ) {
 
 		type = type || 'wgs84';
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			wx.getLocation({
 				type:type,
 				success:function( data ) {
@@ -402,7 +402,7 @@ function Utils( option ) {
 	 */
 	this.chooseLocation = function() {
 
-		return new Promise(function (resolve, reject) {
+		return new _P(function (resolve, reject) {
 			wx.chooseLocation({
 
 				success:function( data ) {
