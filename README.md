@@ -23,7 +23,7 @@ XpmJS 为微信小程序提供云端能力。无需编写后端代码，即可�
 
 **方法1: 一键安装**
 
-推荐使用[腾讯云一键安装链接](http://partners.qcloud.com/invitation/37360299583e2904ee602)
+推荐使用[腾讯云一键安装链接](http://market.qcloud.com/products/1796)
 （ 访问微信接口快, 可以免费申请 Https 证书 ） 
 
 
@@ -679,7 +679,7 @@ console.log( url );
 
 **【安装后端程序】**
 
-推荐使用[腾讯云](http://partners.qcloud.com/invitation/37360299583e2904ee602)（ 访问微信接口快, 可以免费申请 Https 证书 ） 
+推荐使用[腾讯云](http://market.qcloud.com/products/1796)（ 访问微信接口快, 可以免费申请 Https 证书 ） 
 
 方法1: 使用脚本安装 （ **目前仅支持 Ubuntu 14.04 64 LTS 操作系统** ）
 
