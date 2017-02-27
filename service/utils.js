@@ -23,7 +23,31 @@ function Utils( option ) {
 
 
 	/**
-	 * 返回二维码地址 ( 1.0 RC5 )
+	 * 获取小程序页面二维码 ( 1.0  RC6 )
+	 * @param  string path 小程序页面
+	 * @param  number width 二维码的宽度 默认 430
+	 */
+	this.qrcode = function( path, width, option ) {
+		option = option || {};
+		var api  = 'https://' +  this.host + '/baas/utils/pageqr';
+		width = width || 430;
+
+		var query = option || {}, queryString = [];
+		query['path'] = escape(path);
+		query['width'] = width;
+		query["_sid"] = this.ss.id();
+		query["_cid"] = option['app'] || this.cid;
+
+		for( var key in query  ) {
+			queryString.push( key + '=' + query[key]);
+		}
+		return api + '?' + queryString.join('&');
+
+	}
+
+
+	/**
+	 * 获取二维码地址 ( 1.0 RC5 )
 	 * @param  string content 二维码内容
 	 * @param  object option 配置项
 	 *         number option.size   大小(长宽) 默认 300 
