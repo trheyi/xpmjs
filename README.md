@@ -53,7 +53,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc5
+    tuanduimao/xpmjs-server:1.0
 
 ```
 
@@ -614,7 +614,7 @@ que.select('world').push('create', {  // 增加数据
 ```
 
 
-### 9. 文件上传 Utils.upload  &  App.upload  (xpmjs-server 1.0rc5+)
+### 9. 文件上传 Utils.upload  &  App.upload  (xpmjs-server 1.0+)
 
 上传文件到腾讯云对象存储 
  
@@ -654,7 +654,7 @@ utils.fetch( 'http://qcloud.com' ).then( function( resp ) {
 ```
 
 
-#### 生成二维码图片 ( Utils.qrImageUrl ) (xpmjs-server 1.0rc5+)
+#### 生成二维码图片 ( Utils.qrImageUrl ) (xpmjs-server 1.0+)
 
 返回二维码图片地址
 
@@ -713,7 +713,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0rc5
+    tuanduimao/xpmjs-server:1.0
         
 ```
 
