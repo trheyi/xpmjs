@@ -57,6 +57,25 @@ docker run -d --name=xpmjs-server  \
 
 ```
 
+
+### XpmJS Server 升级
+
+第一步: 下载代码: 
+
+```bash
+curl http://xpmjs-1252011659.costj.myqcloud.com/xpmjs-server-1.0.tar.gz
+
+```
+
+第二步: 解压并更新:
+
+```bash
+tar xvfz xpmjs-server-1.0.tar.gz
+cd 1.0 && docker cp . xpmjs-server:/code
+
+```
+
+
 ## 三、XpmJS 咋用
 
 ### 1. 用户 ( User )
