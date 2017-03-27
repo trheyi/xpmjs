@@ -665,6 +665,17 @@ console.log( url );
 ```
 
 
+#### 生成小程序页面二维码  ( Utils.qrcode ) ( xpmjs-server 1.0 )
+
+```javascript
+var utils = app.xpm.require('Utils' ); 
+var url = utils.qrcode('/page/detail?id=1');
+console.log( url );
+
+```
+
+
+
 ## 三、微信小程序 Demo
 
 ![微信小程序 Demo](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat.demo.png)
