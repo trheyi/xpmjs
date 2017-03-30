@@ -1,0 +1,22 @@
+<view class="flex-row" style="" wx:key="" wx:for="{{table}}">
+  <button 
+    type="warn" 
+    size="mini"
+    loading="{{loading}}" 
+    disabled="{{disabled}}" 
+    bindtap="rebuild" 
+    data-name="{{item}}"
+    class="flat-btn"
+    hover-class="other-button-hover"> 重建表 {{item}} </button>
+
+  <button 
+    type="default" 
+    size="mini"
+    loading="{{loading}}" 
+    disabled="{{disabled}}" 
+    data-name="{{item}}"
+    bindtap="faker" 
+    style="margin-left:20rpx;"
+    class="flat-btn"
+    hover-class="other-button-hover"> 生成数据  {{item}} </button>
+</view>
