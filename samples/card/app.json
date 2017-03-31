@@ -1,0 +1,15 @@
+{
+  "pages":[
+        "pages/card/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "卡券",
+    "navigationBarTextStyle":"black"
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  }
+}
