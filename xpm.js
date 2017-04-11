@@ -17,7 +17,11 @@ function xpm( opt ) {
 	this.require = function ( service_name, params  ) {
 		var se = require( 'service'  +  '/' + service_name.toLowerCase() + '.js' );
 		params = params || {};
-		return new se( this.opt , params);
+		if ( arguments.length > 2 ) {
+			var more = arguments[2];
+			return new se( this.opt , params, more );
+		}
+		return new se( this.opt , params );
 	}
 
 	/**

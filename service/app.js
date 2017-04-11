@@ -4,13 +4,13 @@ var Session = require('session.js');
 var Utils = require('utils.js');
 
 
-function App( option, app_name ) {
+function App( option, app_name, query ) {
 
 	option = option || {};
 	app_name = app_name || '';
 	this.host = option['https'] || option['host'];
 	this.apihost = 'https://' +  this.host + '/baas/route/app';
-	this.query = {};
+	this.query = query || {};
 	this.sync = false;
 
 	this.ss = new Session( option );
@@ -18,14 +18,12 @@ function App( option, app_name ) {
 	this.ss.start();
 	this.app_name = app_name || '';
 
-
 	this.api = function( controller, action, query ) {
 		query = query || {};
-		this.query = query;
+		this.query = this.utils.merge(this.query, query);
 		this.query['_c'] = controller || 'defaults';
 		this.query['_a'] = action || 'index';
 		this.query['_app'] = this.app_name;
-
 		return this;
 	}
 
