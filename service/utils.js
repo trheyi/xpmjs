@@ -271,7 +271,14 @@ function Utils( option ) {
 					}
 
 					if ( typeof res['data']['code'] != 'undefined' &&  res['data']['code']  != 0 ) {
-						reject(new Excp('请求API失败',500, {
+
+					   res.data = res.data || {};
+				       var message = res.data.message || '请求API失败';
+				       if ( typeof res.data == 'string' ) {
+				       		message = res.data;
+				       }
+
+						reject(new Excp( message, 500, {
 							res:res,
 							method:method, 
 							api:api, 
@@ -282,7 +289,14 @@ function Utils( option ) {
 					}
 
 					if ( typeof res['data'] != 'object' && option['dataType'] == 'json') {
-						reject(new Excp('请求API失败',500, {
+
+					   res.data = res.data || {};
+				       var message = res.data.message || '请求API失败';
+				       if ( typeof res.data == 'string' ) {
+				       		message = res.data;
+				       }
+
+						reject(new Excp(message,500, {
 							res:res,
 							method:method, 
 							api:api, 
