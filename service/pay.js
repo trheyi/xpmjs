@@ -131,6 +131,7 @@ function Pay( option ) {
 
 			params['_events'] = that.cloudEvents;
 			params['_prefix'] = that.prefix;
+			that.cloudEvents = {'before':[], 'success':[], 'complete':[], 'fail':[] };
 
 			utils.request('POST', that.api + '/unifiedorder', params )
 
