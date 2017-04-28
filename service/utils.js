@@ -332,6 +332,15 @@ function Utils( option ) {
 	 */
 	this.timediff = function( start, end, unit ) {
 		var u = unit || 'second'; // day hour  minute second
+	
+		if ( typeof start == 'string') {
+			start = start.replace(/-/g, "/");
+		}
+
+		if ( typeof end == 'string') {
+			end = end.replace(/-/g, "/");
+		}
+
 		var startDate = new Date( start );
 		var endDate   = new Date( end );
 
