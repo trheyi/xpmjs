@@ -16,7 +16,16 @@ function App( option, app_name, query ) {
 	this.ss = new Session( option );
 	this.utils = new Utils( option );
 	this.ss.start();
-	this.app_name = app_name || '';
+	app_name_arr = app_name.split('/');
+	if ( app_name_arr.length == 1 ) {
+		this.org_name = 'tuanduimao';
+		this.app_name = app_name_arr[0];
+		
+	} else {
+		this.org_name = app_name_arr[0];
+		this.app_name = app_name_arr[1];
+	}
+
 
 	this.api = function( controller, action, query ) {
 		query = query || {};
@@ -24,6 +33,7 @@ function App( option, app_name, query ) {
 		this.query['_c'] = controller || 'defaults';
 		this.query['_a'] = action || 'index';
 		this.query['_app'] = this.app_name;
+		this.query['_org'] = this.org_name;
 		return this;
 	}
 
