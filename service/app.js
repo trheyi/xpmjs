@@ -16,7 +16,7 @@ function App( option, app_name, query ) {
 	this.ss = new Session( option );
 	this.utils = new Utils( option );
 	this.ss.start();
-	app_name_arr = app_name.split('/');
+	var app_name_arr = app_name.split('/');
 	if ( app_name_arr.length == 1 ) {
 		this.org_name = 'tuanduimao';
 		this.app_name = app_name_arr[0];
