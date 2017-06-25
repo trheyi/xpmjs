@@ -8,7 +8,7 @@ function File( option ) {
 
 	this.host = option['https'] || option['host'];
 	this.prefix= option['table.prefix'] || '';
-	this.api = 'https://' +  this.host + '/baas/file';
+	this.api = 'https://' +  this.host + '/_a/baas/file';
 	this.ss = new Session( option );
 	this.ss.start();
 	this.que = [];

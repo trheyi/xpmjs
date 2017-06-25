@@ -106,7 +106,7 @@ function Pay( option ) {
 
 	this.host = option['https'] || option['host'];
 	this.prefix= option['table.prefix'] || '';
-	this.api = 'https://' +  this.host + '/baas/pay';
+	this.api = 'https://' +  this.host + '/_a/baas/pay';
 	this.ss = new Session( option );
 	this.ss.start();
 	this.cloudEvents = {'before':[], 'success':[], 'complete':[], 'fail':[] };

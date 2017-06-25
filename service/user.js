@@ -12,7 +12,7 @@ function User( option )  {
 	this.host = option['https'] || option['host'];
 	this.prefix= option['table.prefix'] || '';
 	this.table_name = option['user.table'] || 'user';
-	this.api = 'https://' +  this.host + '/baas/user';
+	this.api = 'https://' +  this.host + '/_a/baas/user';
 	this.tab = new Table( option, this.table_name );
 	this.cid =  option.app || '';
 

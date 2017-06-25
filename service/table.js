@@ -8,7 +8,7 @@ function table( option, table_name ) {
 
 	this.host = option['https'] || option['host'];
 	this.prefix= option['table.prefix'] || '';
-	this.api = 'https://' +  this.host + '/baas/table';
+	this.api = 'https://' +  this.host + '/_a/baas/table';
 	this.table_name = table_name || null;
 	this.queryBuilder = { 
 			where:[], 

@@ -11,7 +11,7 @@ function Card( option )  {
 
 	var utils = new Utils( option );
 	this.host = option['https'] || option['host'];
-	this.api = 'https://' +  this.host + '/baas/card';
+	this.api = 'https://' +  this.host + '/_a/baas/card';
 	this.ss = new Session( option );
 	this.ss.start();
 

@@ -47,7 +47,7 @@ function que( option, name ) {
 	var utils = new Utils( option );
 	this.host = option['https'] || option['host'];
 	this.prefix= option['table.prefix'] || '';
-	this.api = 'https://' +  this.host + '/baas/que';
+	this.api = 'https://' +  this.host + '/_a/baas/que';
 	this.ss = new Session( option );
 	this.ss.start();
 

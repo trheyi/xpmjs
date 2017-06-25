@@ -749,7 +749,7 @@ docker run -d --name=xpmjs-server  \
 
 **【上传 HTTPS 证书 & 微信支付证书】**
 
-访问：http://yourdomian.com/baas-admin/cert/index
+访问：http://yourdomian.com/_a/baas-admin/cert/index
 上传 HTTPS 证书和证书密钥； 如已申请微信支付，建议尽量上传支付证书，用于双向验证证书和密钥，确保支付安全。
 
 ![https-cert.png](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/https-cert.png)
@@ -765,7 +765,7 @@ docker restart xpmjs-server
 
 **【设置小程序配置信息】**
 
-访问： https://yourdomian.com/baas-admin/conf/index ( 有 **"S"**， 填写小程序和微信支付的信息 ）
+访问： https://yourdomian.com/_a/baas-admin/conf/index ( 有 **"S"**， 填写小程序和微信支付的信息 ）
 
 ![wechat-conf](http://of2is3ok3.bkt.clouddn.com/xpmjs/xpmjs/wechat-conf.png)
 

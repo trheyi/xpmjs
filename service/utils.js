@@ -16,7 +16,7 @@ function Utils( option ) {
 
 
 	this.send = function( data ) {
-		var api  = 'https://' +  this.host + '/baas/utils/send';
+		var api  = 'https://' +  this.host + '/_a/baas/utils/send';
 			data = data || {};
 		return this.request( 'POST', api, data);
 	}
@@ -29,7 +29,7 @@ function Utils( option ) {
 	 */
 	this.qrcode = function( path, width, option ) {
 		option = option || {};
-		var api  = 'https://' +  this.host + '/baas/utils/pageqr';
+		var api  = 'https://' +  this.host + '/_a/baas/utils/pageqr';
 		width = width || 430;
 
 		var query = option || {}, queryString = [];
@@ -61,7 +61,7 @@ function Utils( option ) {
 	 * @return string 二维码图片地址
 	 */
 	this.qrImageUrl = function( content, option ) {
-		var api  = 'https://' +  this.host + '/baas/utils/qrcode';
+		var api  = 'https://' +  this.host + '/_a/baas/utils/qrcode';
 		var query = option || {}, queryString = [];
 		query['code'] = escape(content);
 		query['size'] = query['size'] || 300;
@@ -113,7 +113,7 @@ function Utils( option ) {
 	 */
 	this.fetch = function ( url, option ) {
 
-		var api  = 'https://' +  this.host + '/baas/route/url';
+		var api  = 'https://' +  this.host + '/_a/baas/route/url';
 			option = option || {};
 			option['datatype'] = option['datatype'] || 'html';
 			option['type'] =  option['type'] || 'form';

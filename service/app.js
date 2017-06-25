@@ -9,7 +9,7 @@ function App( option, app_name, query ) {
 	option = option || {};
 	app_name = app_name || '';
 	this.host = option['https'] || option['host'];
-	this.apihost = 'https://' +  this.host + '/baas/route/app';
+	this.apihost = 'https://' +  this.host + '/_a/baas/route/app';
 	this.query = query || {};
 	this.sync = false;
 
