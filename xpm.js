@@ -24,6 +24,18 @@ function xpm( opt ) {
 		return new se( this.opt , params );
 	}
 
+
+	/**
+	 * 载入应用文件
+	 * @param  {[type]} params [description]
+	 * @return {[type]}        [description]
+	 */
+	this.api = function ( params ) {
+		return this.require('app', params);
+	}
+
+
+
 	/**
 	 * 设定配置信息
 	 * @param  array option 设置或读取配置信息

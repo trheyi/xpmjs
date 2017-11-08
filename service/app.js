@@ -7,7 +7,7 @@ var Utils = require('utils.js');
 function App( option, app_name, query ) {
 
 	option = option || {};
-	app_name = app_name || '';
+	this.app_name_o  = app_name = app_name || '';
 	this.host = option['https'] || option['host'];
 	this.apihost = 'https://' +  this.host + '/_a/baas/route/app';
 	this.query = query || {};
@@ -34,7 +34,7 @@ function App( option, app_name, query ) {
 	this.method = function( method, query ) {
 		query = query || {};
 		this.query = this.utils.merge(this.query, query);
-		this.apihost = 'https://' + this.host + '/_api/' +  this.org_name + '/' + this.app_name + '/' + method;
+		this.apihost = 'https://' + this.host + '/_api/' +  this.app_name_o + '/' + method;
 		return this;
 	}
 
@@ -43,7 +43,7 @@ function App( option, app_name, query ) {
 	 * @param  {[type]} method [description]
 	 * @return {[type]}        [description]
 	 */
-	this.$ = function( method, query ) {
+	this._ = function( method, query ) {
 		return this.method(method, query);
 	}
 
