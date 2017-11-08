@@ -252,11 +252,25 @@ function Utils( option ) {
 		option['header'] = option['header'] || {'content-type': 'application/json'};
 		option['dataType'] = option['dataType'] || 'json';
 		data = data || {};
-		data["_sid"] = this.ss.id();
-		data["_cid"] = this.cid;
-		data["_appid"] = this.appid;
-		data["_secret"] = this.secret;
+		var queryAdd = {};
+		
+		queryAdd["_sid"] = this.ss.id();
+		queryAdd["_cid"] = this.cid;
+		queryAdd["_appid"] = this.appid;
+		queryAdd["_secret"] = this.secret;
 
+		var query = [], queryString ='';
+		for( var field in queryAdd ) {
+			query.push(field + '=' + queryAdd[field]);
+		}
+
+		var queryString = query.join('&');
+
+		if ( api.indexOf('?') === -1 ) {
+			api = api + '?' + queryString;
+		} else {
+			api = api + '&' + queryString;
+		}
 
 		return new _P(function (resolve, reject) {
 

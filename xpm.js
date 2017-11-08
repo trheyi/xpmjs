@@ -21,6 +21,7 @@ function xpm( opt ) {
 			var more = arguments[2];
 			return new se( this.opt , params, more );
 		}
+		
 		return new se( this.opt , params );
 	}
 

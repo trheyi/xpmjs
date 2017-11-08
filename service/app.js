@@ -6,15 +6,15 @@ var Utils = require('utils.js');
 
 function App( option, app_name, query ) {
 
-	option = option || {};
+	this.option = option || {};
 	this.app_name_o  = app_name = app_name || '';
 	this.host = option['https'] || option['host'];
 	this.apihost = 'https://' +  this.host + '/_a/baas/route/app';
 	this.query = query || {};
 	this.sync = false;
 
-	this.ss = new Session( option );
-	this.utils = new Utils( option );
+	this.ss = new Session( this.option );
+	this.utils = new Utils( this.option );
 	this.ss.start();
 	var app_name_arr = app_name.split('/');
 	if ( app_name_arr.length == 1 ) {
@@ -71,25 +71,35 @@ function App( option, app_name, query ) {
 			opt['dataType'] = 'text';
 		}
 
-		api  +=  '?' + query.join('&');
+		queryString = query.join('&');
+		if ( api.indexOf('?') === -1 ) {
+			api = api + '?' + queryString;
+		} else {
+			api = api + '&' + queryString;
+		}
 		return this.utils.request('GET', api, {}, opt );
 	}
 
 
-	this.post = function ( data, json ) {
+	this.post = function ( data, opt ) {
 		data = data || {};
 		var query = [], queryString ='',  api=this.apihost,  opt={};
 		for( var field in this.query ) {
 			query.push(field + '=' + this.query[field]);
 		}
 
-		if ( typeof json == 'undefined' || json === true ) {
-			opt['dataType'] = 'json';
+		opt['header'] = opt['header'] || {};
+		opt['dataType'] = opt['dataType'] || 'json';
+		opt['header']['content-type'] = opt['content-type'] || 'application/x-www-form-urlencoded';
+		
+		queryString = query.join('&');
+		if ( api.indexOf('?') === -1 ) {
+			api = api + '?' + queryString;
 		} else {
-			opt['dataType'] = 'text';
+			api = api + '&' + queryString;
 		}
 
-		api  +=  '?' + query.join('&');
+
 		return this.utils.request('POST', api, data, opt );
 	}
 
