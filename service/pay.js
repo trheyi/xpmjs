@@ -112,6 +112,8 @@ function Pay( option ) {
 	this.cloudEvents = {'before':[], 'success':[], 'complete':[], 'fail':[] };
 	this.params =  {};
 
+
+
 	/**
 	 * 发起微信支付请求
 	 *

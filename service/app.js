@@ -26,6 +26,28 @@ function App( option, app_name, query ) {
 		this.app_name = app_name_arr[1];
 	}
 
+	/**
+	 * + method 方法
+	 * @param  {[type]} method [description]
+	 * @return {[type]}        [description]
+	 */
+	this.method = function( method, query ) {
+		query = query || {};
+		this.query = this.utils.merge(this.query, query);
+		this.apihost = 'https://' + this.host + '/_api/' +  this.org_name + '/' + this.app_name + '/' + method;
+		return this;
+	}
+
+	/**
+	 * 迅捷函数
+	 * @param  {[type]} method [description]
+	 * @return {[type]}        [description]
+	 */
+	this.$ = function( method, query ) {
+		return this.method(method, query);
+	}
+
+
 
 	this.api = function( controller, action, query ) {
 		query = query || {};

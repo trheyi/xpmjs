@@ -15,6 +15,11 @@ function Utils( option ) {
 	this.cid =  option.app || '';
 
 
+	// 1.5.1 新增: 用户数据处理云端应用
+	this.appid = option['appid']; // 小程序ID，可不填写
+	this.secret = option['secret']; // 云端鉴权 secret 格式为 appid|secret
+
+
 	this.send = function( data ) {
 		var api  = 'https://' +  this.host + '/_a/baas/utils/send';
 			data = data || {};
@@ -118,7 +123,7 @@ function Utils( option ) {
 			option['datatype'] = option['datatype'] || 'html';
 			option['type'] =  option['type'] || 'form';
 			option['header'] = option['header']  || {};
-
+			
 		return this.request( 'POST', api, {
 			'url': url,
 			'method':option['method'] || 'GET',
@@ -249,6 +254,9 @@ function Utils( option ) {
 		data = data || {};
 		data["_sid"] = this.ss.id();
 		data["_cid"] = this.cid;
+		data["_appid"] = this.appid;
+		data["_secret"] = this.secret;
+
 
 		return new _P(function (resolve, reject) {
 

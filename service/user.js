@@ -10,11 +10,23 @@ function User( option )  {
 
 	this.ss = new Session( option );
 	this.host = option['https'] || option['host'];
-	this.prefix= option['table.prefix'] || '';
-	this.table_name = option['user.table'] || 'user';
+	
 	this.api = 'https://' +  this.host + '/_a/baas/user';
+
+	// 1.5.1 + 废弃
+	this.prefix= option['table.prefix'] || '';
+	// 1.5.1 + 废弃
+	this.table_name = option['user.table'] || 'user';
+	// 1.5.1 + 废弃
 	this.tab = new Table( option, this.table_name );
+	// 1.5.1 + 废弃
 	this.cid =  option.app || '';
+
+
+	// 1.5.1 新增: 用户数据处理云端应用
+	this.handler = option['user'] || '';
+	this.appid = option['appid']; // 小程序ID，可不填写
+	this.secret = option['secret']; // 云端鉴权 secret 格式为 appid|secret
 
 
 	// 用户退出
@@ -104,13 +116,19 @@ function User( option )  {
 
 						var reqData = {
 							_sid:that.ss.id(), 
-							_cid:that.cid,
-							_table:that.table_name,
-							_prefix:that.prefix,
+							_handler:that.handler, // 用户处理程序 (转交给云端应用处理)
+							_secret:that.secret,  // 后端校验 Secret
+							_appid:that.appid,    // 小程序的 APPID
+							_cid:that.cid,  // 1.5.1 + 废弃
+							_table:that.table_name,  // 1.5.1 + 废弃
+							_prefix:that.prefix, // 1.5.1 + 废弃
 							code: coderes.code,
 							rawData:res.rawData,
 							signature:res.signature
 						};
+
+
+						console.log( reqData );
 
 						wx.request({
 							url: that.api + '/login',
