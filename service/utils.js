@@ -292,6 +292,8 @@ function Utils( option ) {
 						return;
 					}
 
+					res['data'] = res['data'] || {};
+					
 					if ( typeof res['data']['code']  != null && typeof res['data']['code'] != 'undefined' && typeof res['data']['message'] != 'undefined' &&  res['data']['code']  != 0 ) {
 
 					   res.data = res.data || {};
