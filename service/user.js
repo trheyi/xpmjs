@@ -101,6 +101,7 @@ function User( option )  {
 
 					.then( function( res ) {
 
+						res = res || {};
 						var userinfo = res.userInfo;
 						
 						if ( that.ss.isVerified() ) {
