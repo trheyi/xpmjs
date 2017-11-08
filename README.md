@@ -3,8 +3,9 @@ XpmJS - 小程序云端增强 SDK
 
 ## 最近更新
 
-### + config 更新 ( require  xpmjs-server 1.5.2+ )
-```
+### + config 更新 ( xpmjs-server 1.5.2+ )
+
+```javascript
 var host = 'wss.xpmjs.com';
 var option = {
     'app':1,
@@ -21,7 +22,7 @@ var option = {
 var xpm = require('xpmjs/xpm.js').option(option);
 ```
 
-### + api 调用云端应用API ( require  xpmjs-server 1.5.2+ )
+### + api 调用云端应用API (  xpmjs-server 1.5.2+ )
  
 ```javascript
 var $user = app.xpm.api('mina/user/user');
@@ -33,6 +34,11 @@ $user._('test', {hello:'world'} ).get()
             .catch( function( excp ){});
 
 ```
+
+### + MINA WEB (预览版)
+
+文档: http://book.tuanduimao.com/357326
+
 
 
 ## 一、XpmJS 是啥
