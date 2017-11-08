@@ -80,10 +80,7 @@ function User( option )  {
 					}));
 				}
 			});
-
-
 		});
-
 	}
 
 
@@ -105,10 +102,12 @@ function User( option )  {
 					.then( function( res ) {
 
 						var userinfo = res.userInfo;
+						console.log( that.ss.isVerified() );
 
 						if ( that.ss.isVerified() ) {
 							userinfo['_id'] = that.ss.get('_login_id') ||  null;
-							if ( userinfo['_id']  != null ) {
+							userinfo['_user']= that.ss.get('_login_user') ||  null;
+							if ( userinfo['_id']  != null || userinfo['_user'] !=null ) {
 								resolve( userinfo );
 								return;
 							}
@@ -126,9 +125,6 @@ function User( option )  {
 							rawData:res.rawData,
 							signature:res.signature
 						};
-
-
-						console.log( reqData );
 
 						wx.request({
 							url: that.api + '/login',
@@ -161,12 +157,15 @@ function User( option )  {
 								that.ss.id( res['data']['id'] ); // 设定服务端分配的ID 
 								that.ss.set('_login_id', res['data']['_id']);
 								userinfo['_id'] = res['data']['_id'];
-								resolve( userinfo );
+								if (typeof res['data']['_user'] != 'undefined' ) {
+									that.ss.set('_login_user', res['data']['_user']);
+									userinfo['_user'] = res['data']['_user'];
+								}
 
+								resolve( userinfo );
 							},
 
 							fail: function (res) { 
-
 								reject(new Excp('用户登录失败',500, {
 									'res':res,
 								}));
