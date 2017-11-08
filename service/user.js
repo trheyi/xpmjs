@@ -102,8 +102,7 @@ function User( option )  {
 					.then( function( res ) {
 
 						var userinfo = res.userInfo;
-						console.log( that.ss.isVerified() );
-
+						
 						if ( that.ss.isVerified() ) {
 							userinfo['_id'] = that.ss.get('_login_id') ||  null;
 							userinfo['_user']= that.ss.get('_login_user') ||  null;
