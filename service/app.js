@@ -31,10 +31,10 @@ function App( option, app_name, query ) {
 	 * @param  {[type]} method [description]
 	 * @return {[type]}        [description]
 	 */
-	this.method = function( method, query ) {
+	this.method = function(  query ) {
 		query = query || {};
 		this.query = this.utils.merge(this.query, query);
-		this.apihost = 'https://' + this.host + '/_api/' +  this.app_name_o + '/' + method;
+		this.apihost = 'https://' + this.host + '/_api/' +  this.app_name_o;
 		return this;
 	}
 
@@ -43,9 +43,7 @@ function App( option, app_name, query ) {
 	 * @param  {[type]} method [description]
 	 * @return {[type]}        [description]
 	 */
-	this._ = function( method, query ) {
-		return this.method(method, query);
-	}
+	this._ = this.method;
 
 
 

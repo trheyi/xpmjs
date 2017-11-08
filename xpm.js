@@ -31,7 +31,10 @@ function xpm( opt ) {
 	 * @return {[type]}        [description]
 	 */
 	this.api = function ( params ) {
-		return this.require('app', params);
+		var that = this;
+		return function( query ){
+			return that.require('app', params)._(query);
+		}
 	}
 
 

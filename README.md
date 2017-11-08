@@ -25,13 +25,16 @@ var xpm = require('xpmjs/xpm.js').option(option);
 ### + api 调用云端应用API (  xpmjs-server 1.5.2+ )
  
 ```javascript
-var $user = app.xpm.api('mina/user/user');
-$user._('test', {hello:'world'} ).get()
+var $test = app.xpm.api('mina/user/user/test');
 
-            .then(function(resp){
-                console.log( resp );
-            })
-            .catch( function( excp ){});
+$test({hello:'world'}).get()
+
+.then(function(resp){
+    console.log( resp );
+})
+.catch( function(excp){
+    console.log('excp', excp);
+});
 
 ```
 
