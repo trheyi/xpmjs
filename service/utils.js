@@ -292,7 +292,7 @@ function Utils( option ) {
 						return;
 					}
 
-					if ( typeof res['data']['code'] != 'undefined' &&  res['data']['code']  != 0 ) {
+					if ( typeof res['data']['code']  != null && typeof res['data']['code'] != 'undefined' && typeof res['data']['message'] != 'undefined' &&  res['data']['code']  != 0 ) {
 
 					   res.data = res.data || {};
 				       var message = res.data.message || '请求API失败';
