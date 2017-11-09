@@ -45,7 +45,9 @@ function App( option, app_name, query ) {
 	 */
 	this._ = this.method;
 
-
+	this.$ = function(){
+		return this.utils;
+	}
 
 	this.api = function( controller, action, query ) {
 		query = query || {};
@@ -103,8 +105,8 @@ function App( option, app_name, query ) {
 		return this.utils.request('POST', api, data, opt );
 	}
 
-	
-	this.upload = function( tmpFile, name, data, json ) {
+
+	this.upload = function( tmpFile, name, data, opt ) {
 
 		name = name || 'wxfile';
 		data = data || {};
@@ -113,13 +115,15 @@ function App( option, app_name, query ) {
 			query.push(field + '=' + this.query[field]);
 		}
 
-		if ( typeof json == 'undefined' || json === true ) {
-			opt['dataType'] = 'json';
-		} else {
-			opt['dataType'] = 'text';
-		}
+		opt['header'] = opt['header'] || {};
+		opt['dataType'] = opt['dataType'] || 'json';
 
-		api  +=  '?' + query.join('&');
+		queryString = query.join('&');
+		if ( api.indexOf('?') === -1 ) {
+			api = api + '?' + queryString;
+		} else {
+			api = api + '&' + queryString;
+		}
 
 		return this.utils.upload(tmpFile, name, api, data, opt );
 	}

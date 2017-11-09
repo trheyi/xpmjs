@@ -20,6 +20,13 @@ function Utils( option ) {
 	this.secret = option['secret']; // 云端鉴权 secret 格式为 appid|secret
 
 
+	/**
+	 * 上传任务清单
+	 * @type
+	 */
+	this.uploadTasks = [];
+
+
 	this.send = function( data ) {
 		var api  = 'https://' +  this.host + '/_a/baas/utils/send';
 			data = data || {};
@@ -147,13 +154,37 @@ function Utils( option ) {
 	 */
 	this.upload = function( tmpFile, name, api, data, option ) {
 		
+		var that = this;
+
 		option = option || {};
 		data = data || {};
 		option['header'] = option['header'] || {'content-type': 'application/json'};
 		option['dataType'] = option['dataType'] || 'json';
 
+		var queryAdd = {};
+		
+		queryAdd["_sid"] = this.ss.id();
+		queryAdd["_cid"] = this.cid;
+		queryAdd["_appid"] = this.appid;
+		queryAdd["_secret"] = this.secret;
+
+		var query = [], queryString ='';
+		for( var field in queryAdd ) {
+			query.push(field + '=' + queryAdd[field]);
+		}
+
+		var queryString = query.join('&');
+
+
+		if ( api.indexOf('?') === -1 ) {
+			api = api + '?' + queryString;
+		} else {
+			api = api + '&' + queryString;
+		}
+
+
 		return new _P(function (resolve, reject) {
-			wx.uploadFile({
+			that.uploadTasks[name] = wx.uploadFile({
 				url:api,
 				filePath:tmpFile,
 				name:name,
@@ -228,8 +259,19 @@ function Utils( option ) {
 						data:data, 
 						option:option
 					}));
+				},
+				complete: function(res){
+					delete that.uploadTasks[name];
 				}
 			});
+
+
+			// + 进度提示
+			if ( typeof option['onProgressUpdate'] == 'function') {
+				that.uploadTasks[name].onProgressUpdate((res) => {
+					option['onProgressUpdate'](res);
+				});
+			}
 
 		});
 
