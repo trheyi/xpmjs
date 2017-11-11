@@ -77,7 +77,7 @@ XpmJS可以链接任何云端资源，为小程序、移动应用提供云资源
 
 ```bash
 
-# 请采用 Ubuntu 14.04 64位 LTS
+# 支持Ubunbu 16.04 & 14.04 系统，推荐采用 Ubuntu 16.04 64位 LTS 
 curl -sSL http://tuanduimao.com/xpmjs-server-1.5.2.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
 
 ```
@@ -754,9 +754,9 @@ console.log( url );
 
 推荐使用[腾讯云](http://market.qcloud.com/products/1796)（ 访问微信接口快, 可以免费申请 Https 证书 ） 
 
-方法1: 使用脚本安装 （ **目前仅支持 Ubuntu 14.04 64 LTS 操作系统** ）
+方法1: 使用脚本安装 （ **目前支持 Ubuntu 16.04/14.04 64 LTS 操作系统** ）
 
-创建一台云服务器，选择 **Ubuntu 14.04 64 LTS** 操作系统。 登录服务器运行以下脚本。
+创建一台云服务器，选择 **Ubuntu 16.04/14.04 64 LTS** 操作系统。 登录服务器运行以下脚本。
 
 安装前，先提前申请 Docker Hub 镜像
 [申请地址 https://www.daocloud.io/mirror](https://www.daocloud.io/mirror)
