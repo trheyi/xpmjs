@@ -78,7 +78,7 @@ XpmJS可以链接任何云端资源，为小程序、移动应用提供云资源
 ```bash
 
 # 请采用 Ubuntu 14.04 64位 LTS
-curl -sSL http://tuanduimao.com/xpmjs-server.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
+curl -sSL http://tuanduimao.com/xpmjs-server-1.5.2.sh | sh -s yourdomain.com http://<your id>.m.daocloud.io
 
 ```
 
@@ -96,12 +96,12 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    tuanduimao/xpmjs-server:1.0
+    hub.c.163.com/trheyi/tuanduimao:1.5.2
 
 ```
 
 
-### XpmJS Server 升级
+### XpmJS Server 升级 (1.0 ~ 1.5 需升级容器)
 
 第一步: 下载代码: 
 
@@ -119,7 +119,7 @@ cd 1.0 && docker cp . xpmjs-server:/code
 ```
 
 
-## 三、XpmJS 咋用
+## 三、XpmJS 简明文档
 
 ### 1. 用户 ( User )
 
