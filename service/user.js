@@ -40,6 +40,8 @@ function User( option )  {
 				_cid:that.cid,
 				_table:that.table_name,
 				_prefix:that.prefix,
+				_secret:that.secret,  // 后端校验 Secret
+				_appid:that.appid    // 小程序的 APPID
 			};
 
 			wx.request({
