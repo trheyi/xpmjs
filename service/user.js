@@ -83,6 +83,13 @@ function User( option )  {
 		});
 	}
 
+	// 清空缓存
+	this.refresh = function(){
+		this.ss.set('_login_user', null);
+		this.ss.set('_login_id', null);
+		return this;
+	}
+
 
 	// 用户登录
 	this.login = function() {
