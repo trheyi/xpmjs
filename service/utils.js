@@ -265,7 +265,6 @@ function Utils( option ) {
 				}
 			});
 
-
 			// + 进度提示
 			if ( typeof option['onProgressUpdate'] == 'function') {
 				that.uploadTasks[name].onProgressUpdate((res) => {
