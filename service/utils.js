@@ -313,8 +313,14 @@ function Utils( option ) {
 			api = api + '&' + queryString;
 		}
 
-		return new _P(function (resolve, reject) {
+		// 删除 null 值
+		for ( var field in data ) {
+			if ( data[field] == null ) {
+				delete data[field];
+			}
+		}
 
+		return new _P(function (resolve, reject) {
 			wx.request({
 				url: api,
 				data: data, 
