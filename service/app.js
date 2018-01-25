@@ -60,9 +60,15 @@ function App( option, app_name, query ) {
 	}
 
 
-	this.get = function ( json ) {
+	this.get = function ( param, json ) {
+		param = param || {};
 
 		var query = [], queryString ='',  api=this.apihost,  opt={};
+		
+		for( var field in param  ){
+			query.push(field + '=' + param[field]);
+		}
+
 		for( var field in this.query ) {
 			query.push(field + '=' + this.query[field]);
 		}
