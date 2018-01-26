@@ -3,6 +3,71 @@ XpmJS - 小程序云端增强 SDK
 
 ## 最近更新
 
+### + React Native Support ( xpmse 1.6.5 + )
+
+`xpm.js` 配置
+
+```javascript
+import xpm from './xpmjs/xpm.rn';
+let host = 'wss.xpmjs.com';
+let option = {
+    'app':1,
+    'host':host,
+    'https':host,
+    'wss': host + '/ws-server',
+    'table.prefix': '{none}',
+    "appid": "wx0550a96041cf486c",
+    "secret":"151187416275946|0516fa148c2584028ee4a30157bfdc27",
+    "user":"/xpmsns/user/user/wxappLogin"
+}
+
+xpm.option(option);
+export default xpm;
+```
+
+`Home.js` JSX
+
+
+```javascript
+// ...
+import xpm from './xpm';
+// ...
+
+
+/**
+ * 页面数据驱动
+ */
+class __data {
+
+  @observable articles = [];
+  @observable loading = false;
+  @observable curr = null;
+
+  constructor() {
+     // mobx.autorun(() => console.log('auto run', this.page));
+  }
+
+
+  fetch( key = null ) {
+    this.loading = true;
+
+    let $search = xpm.api('/xpmsns/pages/article/search');
+    $search().get({perpage:20, page:2}).then(( resp )=>{
+      console.log( resp );
+      this.articles = resp;
+    }).catch( (excp) => {
+      console.log( 'excp:',  excp );
+    });
+  }
+
+}
+
+// ....
+
+```
+
+
+
 ### + config 更新 ( xpmjs-server 1.5.2+ )
 
 ```javascript
@@ -96,7 +161,7 @@ docker run -d --name=xpmjs-server  \
     -v /host/apps:/apps  \
     -v /host/config:/config  \
     -p 80:80 -p 443:443  \
-    hub.c.163.com/trheyi/tuanduimao:1.5.2
+    hub.c.163.com/trheyi/xpmse:1.6.2
 
 ```
 
