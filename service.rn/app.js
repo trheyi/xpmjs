@@ -16,7 +16,7 @@ function App( option, app_name, query ) {
 	if ( app_name_arr.length == 1 ) {
 		this.org_name = 'tuanduimao';
 		this.app_name = app_name_arr[0];
-		
+
 	} else {
 		this.org_name = app_name_arr[0];
 		this.app_name = app_name_arr[1];
@@ -61,7 +61,7 @@ function App( option, app_name, query ) {
 		param = param || {};
 
 		var query = [], queryString ='',  api=this.apihost,  opt={};
-		
+
 		for( var field in param  ){
 			query.push(field + '=' + param[field]);
 		}
@@ -96,7 +96,7 @@ function App( option, app_name, query ) {
 		opt['header'] = opt['header'] || {};
 		opt['dataType'] = opt['dataType'] || 'json';
 		opt['header']['content-type'] = opt['content-type'] || 'application/x-www-form-urlencoded';
-		
+
 		queryString = query.join('&');
 		if ( api.indexOf('?') === -1 ) {
 			api = api + '?' + queryString;

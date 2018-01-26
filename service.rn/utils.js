@@ -30,7 +30,7 @@ function Utils( option ) {
 	 * 暂未实现
 	 * @return {[type]} [description]
 	 */
-	this.utils.upload = function() {
+	this.upload = function() {
 		return new _P((resolve, reject) =>{
 			resolve(this);
 		});
@@ -38,9 +38,9 @@ function Utils( option ) {
 
 
 	/**
-	 * 
+	 *
 	 * 发起 Request 请求
-	 * 
+	 *
 	 * @param  string method 方法 GET/POST/PUT/DELETE ..
 	 * @param  string api API 地址
 	 * @param  object data  post data
@@ -53,7 +53,7 @@ function Utils( option ) {
 		option['dataType'] = option['dataType'] || 'json';
 		data = data || {};
 		var queryAdd = {};
-		
+
 		// queryAdd["_sid"] = this.ss.id();
 		queryAdd["_cid"] = this.cid;
 		queryAdd["_appid"] = this.appid;
@@ -88,7 +88,7 @@ function Utils( option ) {
 		return new _P(function (resolve, reject) {
 			wx.request({
 				url: api,
-				data: data, 
+				data: data,
 				header: option['header'],
 				method: method,
 				success: function (res){
@@ -96,16 +96,16 @@ function Utils( option ) {
 					if ( res.statusCode != 200 ) {
 						reject(new Excp('请求API失败', res.statusCode, {
 							res:res,
-							method:method, 
-							api:api, 
-							data:data, 
+							method:method,
+							api:api,
+							data:data,
 							option:option
 						}));
 						return;
 					}
 
 					res['data'] = res['data'] || {};
-					
+
 					if ( typeof res['data']['code']  != null && typeof res['data']['code'] != 'undefined' && typeof res['data']['message'] != 'undefined' &&  res['data']['code']  != 0 ) {
 
 					   res.data = res.data || {};
@@ -116,9 +116,9 @@ function Utils( option ) {
 
 						reject(new Excp( message, 500, {
 							res:res,
-							method:method, 
-							api:api, 
-							data:data, 
+							method:method,
+							api:api,
+							data:data,
 							option:option
 						}));
 						return;
@@ -134,9 +134,9 @@ function Utils( option ) {
 
 						reject(new Excp(message,500, {
 							res:res,
-							method:method, 
-							api:api, 
-							data:data, 
+							method:method,
+							api:api,
+							data:data,
 							option:option
 						}));
 						return;
@@ -144,12 +144,12 @@ function Utils( option ) {
 					resolve( res['data'] );
 				},
 
-				fail: function (res) { 
+				fail: function (res) {
 					reject(new Excp('请求API失败',500, {
 						res:res,
-						method:method, 
-						api:api, 
-						data:data, 
+						method:method,
+						api:api,
+						data:data,
 						option:option
 					}));
 				}
@@ -168,7 +168,7 @@ function Utils( option ) {
 	 */
 	this.timediff = function( start, end, unit ) {
 		var u = unit || 'second'; // day hour  minute second
-	
+
 		if ( typeof start == 'string') {
 			start = start.replace(/-/g, "/");
 		}
@@ -181,7 +181,7 @@ function Utils( option ) {
 		var endDate   = new Date( end );
 
 		var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
-		
+
 		if ( u == 'second' ) {
 			return seconds;
 		} else if ( u == 'minute' ) {
@@ -191,7 +191,7 @@ function Utils( option ) {
 		} else if ( u == 'day' ) {
 			return seconds / 86400
 		}
-		
+
 		return seconds;
 	}
 
@@ -219,9 +219,9 @@ function Utils( option ) {
 
 
 	/**
-	 * 合并多个Object 
+	 * 合并多个Object
 	 * @param  Object  n1, n2...  待合并的 Object
-	 * @return Object 
+	 * @return Object
 	 */
 	this.merge = function() {
 
