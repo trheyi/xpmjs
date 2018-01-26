@@ -14,7 +14,7 @@ function App( option, app_name, query ) {
 	this.utils = new Utils( this.option );
 	var app_name_arr = app_name.split('/');
 	if ( app_name_arr.length == 1 ) {
-		this.org_name = 'tuanduimao';
+		this.org_name = 'xpmsns';
 		this.app_name = app_name_arr[0];
 
 	} else {

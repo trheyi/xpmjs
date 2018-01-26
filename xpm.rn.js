@@ -5,7 +5,6 @@
  * * 下一版计划用原生模块的方式实现，将 secret 编译到应用       *
  * *******************************************************
  */
-
 import App from './service.rn/app';
 
 function xpm( opt ) {
@@ -19,9 +18,9 @@ function xpm( opt ) {
 	 * @return {[type]}        [description]
 	 */
 	this.api = function ( params ) {
-		var that = this;
-		return function( query ){
-			let inst = new App( params );
+
+		return ( query ) => {
+			let inst = new App( this.opt, params );
 			return inst._(query);
 		}
 	}

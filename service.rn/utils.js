@@ -79,80 +79,97 @@ function Utils( option ) {
 			}
 		}
 
-		return new _P((resolve, reject) =>{
-			console.log('request called');
-			resolve(this);
-		});
+		let requestOptions  = {
+			method: method,
+			header: option['header']
+		}
 
+		if ( method == 'POST' || method == 'PUT') {
+			requestOptions['body'] = JSON.stringify(data);
+		}
 
-		return new _P(function (resolve, reject) {
-			wx.request({
-				url: api,
-				data: data,
-				header: option['header'],
-				method: method,
-				success: function (res){
+		return new _P( (resolve, reject )=>{
+			fetch( api, requestOptions).then( ( response )=>{
 
-					if ( res.statusCode != 200 ) {
-						reject(new Excp('请求API失败', res.statusCode, {
-							res:res,
-							method:method,
-							api:api,
-							data:data,
-							option:option
-						}));
-						return;
-					}
-
-					res['data'] = res['data'] || {};
-
-					if ( typeof res['data']['code']  != null && typeof res['data']['code'] != 'undefined' && typeof res['data']['message'] != 'undefined' &&  res['data']['code']  != 0 ) {
-
-					   res.data = res.data || {};
-				       var message = res.data.message || '请求API失败';
-				       if ( typeof res.data == 'string' ) {
-				       		message = res.data;
-				       }
-
-						reject(new Excp( message, 500, {
-							res:res,
-							method:method,
-							api:api,
-							data:data,
-							option:option
-						}));
-						return;
-					}
-
-					if ( typeof res['data'] != 'object' && option['dataType'] == 'json') {
-
-					   res.data = res.data || {};
-				       var message = res.data.message || '请求API失败';
-				       if ( typeof res.data == 'string' ) {
-				       		message = res.data;
-				       }
-
-						reject(new Excp(message,500, {
-							res:res,
-							method:method,
-							api:api,
-							data:data,
-							option:option
-						}));
-						return;
-					}
-					resolve( res['data'] );
-				},
-
-				fail: function (res) {
-					reject(new Excp('请求API失败',500, {
-						res:res,
+				if ( response.status != 200 ) {
+					reject(new Excp('请求API失败', response.status, {
+						res:response,
 						method:method,
 						api:api,
 						data:data,
 						option:option
 					}));
+					return;
 				}
+
+
+				if ( option['dataType'] == 'json' || headers.map['content-type'] == 'application/json' ) {
+					
+					response.json().then((data)=>{
+
+						if ( typeof data['code'] != 'undefined' && typeof data['message'] != 'undefined' && parseInt(data['code']) != 0 ) {
+
+					       var message = data.message || '请求API失败';
+					       if ( typeof data == 'string' ) {
+					       		message = data;
+					       }
+
+							reject(new Excp( message, 500, {
+								res:response,
+								method:method,
+								api:api,
+								data:data,
+								option:option
+							}));
+							return;
+						}
+
+						if ( typeof data != 'object') {
+
+					       var message = '请求API失败';
+					       if ( typeof response.responseText == 'string' ) {
+					       		message = response.responseText;
+					       }
+
+							reject(new Excp(message, 500, {
+								res:response,
+								method:method,
+								api:api,
+								data:data,
+								option:option
+							}));
+							return;
+						}
+
+						resolve(data);
+
+					}).catch( ( excp) => {
+
+						reject(new Excp('返回结果不是JSON格式',500, {
+								res:response,
+								error:excp,
+								method:method,
+								api:api,
+								data:data,
+								option:option
+							}));
+					});
+
+					return;
+				} else {
+					resolve(response.responseText);
+					return;
+				}
+			}).catch( ( excp) => {
+
+				reject(new Excp('请求API失败',500, {
+						res:excp,
+						method:method,
+						api:api,
+						data:data,
+						option:option
+					}));
+
 			});
 		});
 	}
