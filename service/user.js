@@ -92,128 +92,151 @@ function User( option )  {
 		return this;
 	}
 
+	// 更新 Session
+	this.set = function( key, val ) {
+		var userinfo = this.ss.get('_login_user') || {};
+			userinfo['_user'] = userinfo['_user'] || {};
+			
+		userinfo[key] = val;
+		userinfo['_user'][key] = val;
+		this.ss.set('_login_user', userinfo);
+	}
 
 	// 用户登录
-	this.login = function() {
-		
+	this.login = function( detail ) {
+
+		detail = detail || {};
+		var rawData = detail.rawData || null;
+		var signature = detail.signature || null;
 		var that = this;
+
 		return new _P(function (resolve, reject) {
 
 			wx.login({
-				success: function( coderes ) {
-
-					that.get() 
-
-					.catch(function(e){
-						reject(e);
-					})
-
-					.then( function( res ) {
-
-						res = res || {};
-						var userinfo = res.userInfo;
-						
-						if ( that.ss.isVerified() ) {
-							userinfo['_id'] = that.ss.get('_login_id') ||  null;
-							userinfo['_user']= that.ss.get('_login_user') ||  null;
-							if ( userinfo['_id']  != null || userinfo['_user'] !=null ) {
-								resolve( userinfo );
-								return;
-							}
+				success: function( loginResp ) {
+					
+					var userinfo = {};
+					if ( that.ss.isVerified() && rawData == null ) {
+						userinfo = that.ss.get('_login_user') ||  {};  	// 向前兼容
+						userinfo['_id'] = that.ss.get('_login_id') ||  null;
+						userinfo['_user']= that.ss.get('_login_user') ||  null; 
+						if ( userinfo['_id']  != null || userinfo['_user'] !=null ) {
+							resolve( userinfo );
+							return;
 						}
+					}
 
-						var reqData = {
-							_sid:that.ss.id(), 
-							_handler:that.handler, // 用户处理程序 (转交给云端应用处理)
-							_secret:that.secret,  // 后端校验 Secret
-							_appid:that.appid,    // 小程序的 APPID
-							_cid:that.cid,  // 1.5.1 + 废弃
-							_table:that.table_name,  // 1.5.1 + 废弃
-							_prefix:that.prefix, // 1.5.1 + 废弃
-							code: coderes.code,
-							rawData:res.rawData,
-							signature:res.signature
-						};
+					var reqData = {
+						_sid:that.ss.id(), 
+						_handler:that.handler, // 用户处理程序 (转交给云端应用处理)
+						_secret:that.secret,  // 后端校验 Secret
+						_appid:that.appid,    // 小程序的 APPID
+						_cid:that.cid,  // 1.5.1 + 废弃
+						_table:that.table_name,  // 1.5.1 + 废弃
+						_prefix:that.prefix, // 1.5.1 + 废弃
+						code: loginResp.code,
+						rawData:rawData,
+						signature:signature
+					};
 
-						wx.request({
-							url: that.api + '/login',
-							data: reqData, // 使用 Code 换取 Session ID 
-							header: {'content-type': 'application/json'},
-							method: 'POST',
-							success: function (res){
+					wx.request({
+						url: that.api + '/login',
+						data: reqData, // 使用 Code 换取 Session ID 
+						header: {'content-type': 'application/json'},
+						method: 'POST',
+						success: function (res){
 
-								if ( res.statusCode != 200 ) {
-									reject(new Excp('用户登录失败 API错误',500, {
-										'res':res,
-									}));
-									return;
-								}
-
-								if ( typeof res['data'] != 'object') {
-									reject(new Excp('用户登录失败 API错误',500, {
-										'res':res,
-									}));
-									return;
-								}
-
-								if ( res['data']['result'] !== true) {
-									reject(new Excp('用户登录失败, Session 校验失败',500, {
-										'res':res,
-									}));
-									return;
-								}
-
-								that.ss.id( res['data']['id'] ); // 设定服务端分配的ID 
-								that.ss.set('_login_id', res['data']['_id']);
-								userinfo['_id'] = res['data']['_id'];
-								if (typeof res['data']['_user'] != 'undefined' ) {
-									that.ss.set('_login_user', res['data']['_user']);
-									userinfo['_user'] = res['data']['_user'];
-								}
-
-								resolve( userinfo );
-							},
-
-							fail: function (res) { 
-								reject(new Excp('用户登录失败',500, {
+							if ( res.statusCode != 200 ) {
+								reject(new Excp('用户登录失败 API错误',500, {
 									'res':res,
 								}));
+								return;
 							}
-						});
 
-					})
+							if ( typeof res['data'] != 'object') {
+								reject(new Excp('用户登录失败 API错误',500, {
+									'res':res,
+								}));
+								return;
+							}
+
+							if ( res['data']['result'] !== true) {
+								reject(new Excp('用户登录失败, Session 校验失败',500, {
+									'res':res,
+								}));
+								return;
+							}
+
+							that.ss.id( res['data']['id'] ); // 设定服务端分配的ID 
+							that.ss.set('_login_id', res['data']['_id']);
+							userinfo['_id'] = res['data']['_id'];
+							if (typeof res['data']['_user'] != 'undefined' ) {
+								that.ss.set('_login_user', res['data']['_user']);
+								userinfo = res['data']['_user']; // 向前兼容
+								userinfo['_user'] = res['data']['_user'];
+							}
+
+							resolve(userinfo); // DEBUG
+						},
+
+						fail: function (res) { 
+							reject(new Excp('用户登录失败',500, {
+								'res':res,
+							}));
+						}
+					});
 
       			},
-
       			fail: function( res ) {
       				reject(new Excp('用户登录失败',500, {
 						'res':res,
 					}));
       			}
 			});
-
-
-			
 		});
 	}
 
-
+	// 废弃
 	this.get = function() {
-		
 		return new _P(function (resolve, reject) {
-			
-			wx.getUserInfo({
-      			success: function(res) {
-      				resolve( res );
-      			},
+			reject({code:500, message:"此接口已废弃"});
 
-      			fail: function( res ) {
-      				reject(new Excp('读取用户信息错误',500, {
-						'res':res,
-					}));
-      			}
-      		});
-
+			// wx.getSetting({
+			// 	success: function(res) {
+			// 		if (!res.authSetting['scope.userInfo']) {
+			// 			wx.authorize({
+			// 				scope:'scope.userInfo',
+			// 				success: function(){
+			// 					resolve({userInfo:{}});
+			// 					// wx.getUserInfo({
+			// 					// 	success: function( res ){
+			// 					// 		resolve( res );
+			// 					// 	},
+			// 					// 	fail:function( res) {
+			// 					// 		reject({code:402, message:"读取用户信息失败"});
+			// 					// 	}
+			// 					// });
+			// 				},
+			// 				fail: function(){
+			// 					reject({code:402, message:"授权失败"});
+			// 				}
+			// 			});
+			// 		}else {
+			// 			resolve({userInfo:{}});
+			// 			// wx.getUserInfo({
+			// 			// 	success: function( res ){
+			// 			// 		resolve( res );
+			// 			// 	},
+			// 			// 	fail:function( res) {
+			// 			// 		reject({code:402, message:"读取用户信息失败"});
+			// 			// 	}
+			// 			// });
+			// 		}
+			// 	},
+			// 	fail: function(res){
+			// 		reject({code:500, message:"读取配置信息失败"});
+			// 	}
+			// });
 		});
 	}
 }
