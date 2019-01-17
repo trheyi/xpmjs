@@ -1,6 +1,7 @@
 if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js').Promise; } else { var _P = Promise; }
 var Session = require('session.js');
 var Excp = require('excp.js');
+var Stor = require('stor.js');
 
 /**
  * 常用工具
@@ -10,7 +11,8 @@ var Excp = require('excp.js');
 function Utils( option ) {
 
 	option = option || {};
-	this.ss = new Session( option );
+    this.ss = new Session( option );
+    this.stor = new Stor( option );
 	this.host = option['https'] || option['host'];
 	this.cid =  option.app || '';
 
@@ -298,7 +300,16 @@ function Utils( option ) {
 		queryAdd["_sid"] = this.ss.id();
 		queryAdd["_cid"] = this.cid;
 		queryAdd["_appid"] = this.appid;
-		queryAdd["_secret"] = this.secret;
+        queryAdd["_secret"] = this.secret;
+        
+        // Cookies
+        var _client_token = this.stor.getSync('_client_token');
+        if ( _client_token != null ){
+            var later30yrs = new Date(new Date().setFullYear(new Date().getFullYear() + 30));
+            var expires = later30yrs.toUTCString();
+            option['header']['cookie'] = `__client_token=${_client_token}; path=/; domain=.${this.host}; Expires=${expires};`
+        }
+        console.log( ' request', option['header']['cookie']  );
 
 		var query = [], queryString ='';
 		for( var field in queryAdd ) {

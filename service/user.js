@@ -2,13 +2,16 @@ if ( typeof Promise == 'undefined' ) { var _P = require('../lib/promise.min.js')
 var Excp = require('excp.js');
 var Session = require('session.js');
 var Table = require('table.js');
+var Stor = require('stor.js');
 
 function User( option )  {
 
 	option = option || {};
 	
 
-	this.ss = new Session( option );
+    this.ss = new Session( option );
+    this.stor = new Stor( option );
+
 	this.host = option['https'] || option['host'];
 	
 	this.api = 'https://' +  this.host + '/_a/baas/user';
@@ -168,7 +171,11 @@ function User( option )  {
 							}
 
 							that.ss.id( res['data']['id'] ); // 设定服务端分配的ID 
-							that.ss.set('_login_id', res['data']['_id']);
+                            that.ss.set('_login_id', res['data']['_id']);
+                            if ( res['data']['_client_token'] ) {
+                                that.stor.setSync('_client_token', res['data']['_client_token']);
+                            }
+
 							userinfo['_id'] = res['data']['_id'];
 							if (typeof res['data']['_user'] != 'undefined' ) {
 								that.ss.set('_login_user', res['data']['_user']);
