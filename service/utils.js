@@ -309,7 +309,7 @@ function Utils( option ) {
             var expires = later30yrs.toUTCString();
             option['header']['cookie'] = `__client_token=${_client_token}; path=/; domain=.${this.host}; Expires=${expires};`
         }
-        console.log( ' request', option['header']['cookie']  );
+        // console.log( ' request', option['header']['cookie']  );
 
 		var query = [], queryString ='';
 		for( var field in queryAdd ) {
