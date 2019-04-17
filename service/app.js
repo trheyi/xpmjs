@@ -60,10 +60,11 @@ function App( option, app_name, query ) {
 	}
 
 
-	this.get = function ( param, json ) {
-		param = param || {};
+	this.get = function ( param, json, opt ) {
+        param = param || {};
+        opt = opt || {};
 
-		var query = [], queryString ='',  api=this.apihost,  opt={};
+		var query = [], queryString ='',  api=this.apihost;
 		
 		for( var field in param  ){
 			query.push(field + '=' + param[field]);
@@ -90,8 +91,9 @@ function App( option, app_name, query ) {
 
 
 	this.post = function ( data, opt ) {
-		data = data || {};
-		var query = [], queryString ='',  api=this.apihost,  opt={};
+        data = data || {};
+        opt = opt || {};
+		var query = [], queryString ='',  api=this.apihost;
 		for( var field in this.query ) {
 			query.push(field + '=' + this.query[field]);
 		}
@@ -115,8 +117,9 @@ function App( option, app_name, query ) {
 	this.upload = function( tmpFile, name, data, opt ) {
 
 		name = name || 'wxfile';
-		data = data || {};
-		var query = [], queryString ='',  api=this.apihost,  opt= opt ||  {};
+        data = data || {};
+        opt = opt || {};
+		var query = [], queryString ='',  api=this.apihost;
 		for( var field in this.query ) {
 			query.push(field + '=' + this.query[field]);
 		}
