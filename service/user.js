@@ -176,6 +176,7 @@ function User( option )  {
 								userinfo['_user'] = res['data']['_user'];
 							}
 
+                            userinfo['__wxres'] = loginResp;
 							resolve(userinfo); // DEBUG
 						},
 
